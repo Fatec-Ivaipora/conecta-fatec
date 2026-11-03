@@ -4,11 +4,11 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Redação Descomplicada ENEM 2026 · Conecta Fatec</title>
-  <meta name="description" content="Domingo é o Enem. Sábado tem aulão com a Fatec! Redação descomplicada, gratuito e ao vivo com o Prof. Dr. Carlos Durlo. 07/11, das 14h às 17h, on-line.">
+  <meta name="description" content="Domingo é o Enem. Sábado tem aulão com a Fatec! Redação descomplicada, gratuito e ao vivo com o Prof. Dr. Carlos Durlo. 07/11, das 14h às 17h, on-line pelo Zoom.">
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://conecta.fatecivaipora.com.br/aulao/">
   <meta property="og:title" content="Redação Descomplicada · ENEM 2026 · aulão gratuito">
-  <meta property="og:description" content="Domingo é o Enem. Sábado tem aulão com a Fatec! 07/11, 14h às 17h, on-line, com o Prof. Dr. Carlos Durlo. Garanta sua vaga.">
+  <meta property="og:description" content="Domingo é o Enem. Sábado tem aulão com a Fatec! 07/11, 14h às 17h, on-line pelo Zoom, com o Prof. Dr. Carlos Durlo. Garanta sua vaga.">
   <meta property="og:image" content="https://conecta.fatecivaipora.com.br/kv/aulao-redacao.jpg">
   <meta property="og:image:width" content="1280">
   <meta property="og:image:height" content="1600">
@@ -45,7 +45,7 @@
     .faixa-data div { background: var(--r-gelo); color: var(--r-azul); display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 24px;
       padding: 18px 28px; font-weight: 800; font-size: clamp(17px, 2.6vw, 26px); clip-path: polygon(0 0, calc(100% - 36px) 0, 100% 36px, 100% 100%, 0 100%); }
     @media (max-width: 560px) {
-      .faixa-data div { flex-wrap: nowrap; font-size: 14px; padding: 14px 30px 14px 16px; gap: 10px;
+      .faixa-data div { flex-wrap: wrap; justify-content: flex-start; column-gap: 18px; font-size: 14px; padding: 14px 30px 14px 16px; gap: 10px;
         clip-path: polygon(0 0, calc(100% - 22px) 0, 100% 22px, 100% 100%, 0 100%); }
     }
     main.wrap { padding-top: 28px; }
@@ -62,7 +62,12 @@
     .prof { color: #fff; }
     .prof .nome { color: #fff; } .prof .quem { color: var(--r-amarelo); } .prof .bio { color: #DCE8FA; }
     .prof img { border-color: var(--r-amarelo); }
-    #cardForm h2 { font-size: 22px; }
+    #cardForm h2 { font-size: 22px; margin-bottom: 8px; }
+    .aviso-zoom { background: #E6F0FF; color: var(--azul-noite); border-left: 4px solid #2D8CFF; border-radius: 10px;
+      padding: 10px 12px; font-size: 14px; margin: 0 0 16px; }
+    .aviso-zoom b { color: #0B5CD6; }
+    .faixa-data .zoom { display: inline-flex; align-items: center; gap: 8px; }
+    .faixa-data .zoom svg { color: #2D8CFF; }
     footer { color: #CFE0F7; } footer b { color: #fff; }
   </style>
 </head>
@@ -77,13 +82,13 @@
         <h1 class="titulo-redacao"><span class="caps">REDAÇÃO</span><span class="script">descomplicada</span></h1>
         <div class="linha-enem">
           <span class="bloco-enem">ENEM 2026</span>
-          <span class="com-prof"><b>Gratuito</b> | ao vivo com o Prof. Dr.<br>Carlos Durlo</span>
+          <span class="com-prof"><b>Gratuito</b> | ao vivo pelo <b>Zoom</b> com o<br>Prof. Dr. Carlos Durlo</span>
         </div>
         <a class="btn so-celular" href="#cardForm" style="margin-top:24px">Quero minha vaga</a>
       </div>
       <div class="foto-arte"><img src="/kv/carlos-durlo.jpg" alt="Prof. Dr. Carlos Durlo"></div>
     </div>
-    <div class="faixa-data"><div><span>07/11, sábado</span><span>14h às 17h</span><span>on-line</span></div></div>
+    <div class="faixa-data"><div><span>07/11, sábado</span><span>14h às 17h</span><span class="zoom"><svg viewBox="0 0 24 24" width="1em" height="1em" aria-hidden="true"><rect x="1" y="5" width="15" height="14" rx="3" fill="currentColor"/><path d="M17 10l6-4v12l-6-4z" fill="currentColor"/></svg> on-line, pelo Zoom</span></div></div>
   </section>
 
   <main class="wrap">
@@ -109,6 +114,7 @@
       <div class="form-col">
         <div class="card" id="cardForm">
           <h2>Garanta sua vaga</h2>
+          <p class="aviso-zoom"><b>É on-line, pelo Zoom.</b> Assista de casa, pelo celular ou computador. O link aparece assim que você se inscrever e também chega no seu WhatsApp.</p>
           <form id="form" novalidate>
             <label>Nome completo
               <input name="nome" autocomplete="name" required maxlength="120" placeholder="Seu nome">
