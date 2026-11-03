@@ -227,3 +227,8 @@ footer b { color: var(--azul); }
 .chip input:checked + span::before { content: "✓ "; }
 .chip input:focus-visible + span { outline: 3px solid rgba(49, 87, 176, .35); outline-offset: 2px; }
 .chip-nao-sei span { border-style: dashed; color: var(--tinta-2); }
+
+/* Marca "Conecta" + logo FATEC */
+.marca-conecta { display: inline-flex; align-items: center; gap: 14px; }
+.marca-conecta b { font-family: var(--script); font-weight: 700; font-size: 40px; line-height: 1; color: var(--amarelo);
+  display: inline-block; transform: rotate(-4deg) translateY(2px); }
