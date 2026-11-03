@@ -131,7 +131,7 @@
       if (!f.nome || f.nome.trim().length < 3) return mostrarMsg(msg, "Digite o nome completo.");
       if (!whatsappValido(f.whatsapp)) {
         form.whatsapp.classList.add("invalido");
-        return mostrarMsg(msg, "Confira o WhatsApp: DDD + número com 9 dígitos.");
+        return mostrarMsg(msg, "Confira o WhatsApp: digite o número do celular, de preferência com DDD.");
       }
       if (!f.cidade || f.cidade.trim().length < 2) return mostrarMsg(msg, "Digite a cidade.");
       if (!f.escola || f.escola.trim().length < 2) return mostrarMsg(msg, "Digite a escola ou toque em uma das opções abaixo do campo.");

@@ -210,3 +210,6 @@ footer b { color: var(--azul); }
   background: var(--amarelo); color: var(--azul-noite); font-weight: 800; font-size: 14px;
   text-align: center; padding: 8px 12px;
 }
+
+.aviso-num:empty { display: none; }
+.aviso-num { color: #0B5CD6; font-weight: 700; }

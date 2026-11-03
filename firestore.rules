@@ -33,6 +33,16 @@ service cloud.firestore {
     }
 
 
+    // Marcador sem dados pessoais, para o "Já me inscrevi" conferir um número.
+    // Só dá para consultar um id exato (get); listar continua proibido.
+    match /inscritos/{id} {
+      allow get: if true;
+      allow create: if request.resource.data.keys().hasOnly(['criadoEm'])
+        && request.resource.data.criadoEm == request.time
+        && existsAfter(/databases/$(db)/documents/leads/$(id))
+        && !exists(/databases/$(db)/documents/leads/$(id));
+    }
+
     match /leads/{id} {
       allow create: if leadValido(id);          // público: só cria, nunca lê
       allow read: if isEquipe();

@@ -69,6 +69,14 @@
     .faixa-data .zoom { display: inline-flex; align-items: center; gap: 8px; }
     .faixa-data .zoom svg { color: #2D8CFF; }
     footer { color: #CFE0F7; } footer b { color: #fff; }
+    .ja-inscrito { margin-top: 16px; padding: 6px 24px; }
+    .ja-abrir { font: inherit; font-weight: 800; font-size: 16px; color: var(--azul-noite); background: none; border: 0;
+      width: 100%; display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 14px 0; cursor: pointer; text-align: left; }
+    .ja-abrir .seta { font-size: 26px; line-height: 1; color: var(--r-laranja); transition: transform .2s; }
+    .ja-abrir.aberto .seta { transform: rotate(90deg); }
+    #formJa { padding-bottom: 18px; }
+    .aviso-num:empty { display: none; }
+    .aviso-num { color: #0B5CD6; font-weight: 700; }
   </style>
 </head>
 <body>
@@ -138,6 +146,21 @@
           </form>
         </div>
 
+        <!-- Já me inscrevi: recupera o link do Zoom pelo WhatsApp -->
+        <div class="card ja-inscrito" id="cardJa">
+          <button type="button" class="ja-abrir" id="jaAbrir" aria-expanded="false" aria-controls="formJa">
+            <span>Já me inscrevi, quero o link do Zoom</span><span aria-hidden="true" class="seta">›</span>
+          </button>
+          <form id="formJa" class="oculto" novalidate>
+            <label>Seu WhatsApp
+              <input name="whatsapp" type="tel" inputmode="numeric" autocomplete="tel-national" placeholder="(43) 99999-9999">
+              <span class="dica">O mesmo número que você usou na inscrição.</span>
+            </label>
+            <div id="msgJa" class="oculto"></div>
+            <button class="btn azul" type="submit" id="btnJa">Buscar minha inscrição</button>
+          </form>
+        </div>
+
         <div class="card sucesso oculto" id="cardOk">
           <div class="icone">✓</div>
           <h2 id="okTitulo">Vaga garantida!</h2>
@@ -158,7 +181,8 @@
   <script type="module">
     import { AULAO } from "/js/config.js";
     import { CIDADES } from "/js/cidades.js";
-    import { autocompletar, campoEscola, aplicarMascara, whatsappValido, salvarLead, mostrarMsg, configurado } from "/js/base.js";
+    import { autocompletar, campoEscola, aplicarMascara, whatsappValido, normalizarWhatsapp, formatarWhatsapp,
+      salvarLead, buscarInscricao, mostrarMsg, configurado } from "/js/base.js";
 
     const $ = id => document.getElementById(id);
     if (AULAO.bioProfessor) $("bio").textContent = AULAO.bioProfessor;
@@ -185,6 +209,7 @@
 
     function sucesso(repetido) {
       $("cardForm").classList.add("oculto");
+      $("cardJa").classList.add("oculto");
       $("cardOk").classList.remove("oculto");
       if (repetido) $("okTitulo").textContent = "Você já estava inscrito!";
       if (AULAO.zoomLink) {
@@ -203,8 +228,9 @@
       if (!f.nome || f.nome.trim().length < 3) return mostrarMsg(msg, "Digite seu nome completo.");
       if (!whatsappValido(f.whatsapp)) {
         form.whatsapp.classList.add("invalido");
-        return mostrarMsg(msg, "Confira o WhatsApp: DDD + número com 9 dígitos.");
+        return mostrarMsg(msg, "Confira o WhatsApp: digite o número do celular, de preferência com DDD.");
       }
+      form.whatsapp.value = formatarWhatsapp(normalizarWhatsapp(f.whatsapp));
       if (!f.cidade || f.cidade.trim().length < 2) return mostrarMsg(msg, "Digite sua cidade.");
       if (!f.escola || f.escola.trim().length < 2) return mostrarMsg(msg, "Digite sua escola ou toque em uma das opções abaixo do campo.");
       if (!form.consentimento.checked) return mostrarMsg(msg, "Marque a autorização para continuar.");
@@ -219,6 +245,42 @@
         mostrarMsg(msg, "Não conseguimos enviar agora. Confira sua internet e tente de novo.");
       } finally {
         btn.disabled = false; btn.textContent = "Quero minha vaga";
+      }
+    });
+
+    // ---------- Já me inscrevi ----------
+    const formJa = $("formJa"), msgJa = $("msgJa"), btnJa = $("btnJa");
+    aplicarMascara(formJa.whatsapp);
+    $("jaAbrir").onclick = () => {
+      const abrir = formJa.classList.contains("oculto");
+      formJa.classList.toggle("oculto", !abrir);
+      $("jaAbrir").setAttribute("aria-expanded", String(abrir));
+      $("jaAbrir").classList.toggle("aberto", abrir);
+      if (abrir) formJa.whatsapp.focus();
+    };
+    formJa.addEventListener("submit", async e => {
+      e.preventDefault();
+      msgJa.className = "oculto";
+      const digitado = formJa.whatsapp.value;
+      if (!whatsappValido(digitado)) {
+        formJa.whatsapp.classList.add("invalido");
+        return mostrarMsg(msgJa, "Digite o número do celular (com ou sem DDD).");
+      }
+      btnJa.disabled = true; btnJa.textContent = "Buscando…";
+      try {
+        const achado = await buscarInscricao(AULAO.origem, digitado);
+        if (achado) {
+          $("okTitulo").textContent = "Achamos sua inscrição!";
+          $("okTexto").textContent = `WhatsApp ${formatarWhatsapp(achado)} · Sábado, 07/11, às 14h. Chegue uns 10 minutos antes.`;
+          sucesso(false);
+        } else {
+          mostrarMsg(msgJa, `Não achamos inscrição com ${formatarWhatsapp(normalizarWhatsapp(digitado))}. Confira o número ou faça sua inscrição no formulário acima. É rapidinho!`);
+        }
+      } catch (err) {
+        console.error(err);
+        mostrarMsg(msgJa, "Não conseguimos buscar agora. Confira sua internet e tente de novo.");
+      } finally {
+        btnJa.disabled = false; btnJa.textContent = "Buscar minha inscrição";
       }
     });
   </script>

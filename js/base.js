@@ -1,7 +1,7 @@
 // Base compartilhada: Firebase, máscara de WhatsApp e gravação do lead.
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import {
-  getFirestore, doc, setDoc, serverTimestamp,
+  getFirestore, doc, getDoc, writeBatch, serverTimestamp,
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import { firebaseConfig } from "./config.js";
@@ -20,22 +20,65 @@ export function soDigitos(v) {
   return d;
 }
 
-/** Celular BR: DDD válido (11–99) + 9 + 8 dígitos. */
+const CELULAR = /^[1-9][1-9]9\d{8}$/;
+const DDDS_REGIAO = ["43", "42", "44"]; // Vale do Ivaí, Pitanga/Guarapuava, Campo Mourão/Maringá
+
+/**
+ * Números completos possíveis a partir do que a pessoa digitou, do mais
+ * provável para o menos:
+ *   43996129558 → igual · 4396129558 (sem o 9) → 43 9 96129558
+ *   996129558 (sem DDD) → 43/42/44 + número · 96129558 → 43/42/44 + 9 + número
+ */
+export function candidatosWhatsapp(v) {
+  const d = soDigitos(v), out = [];
+  if (d.length === 11) out.push(d);
+  // Só completa o 9 em número de celular (começa com 6–9); fixo (2–5) não vira celular.
+  const cel8 = s => /^[6-9]/.test(s);
+  if (d.length === 10 && cel8(d.slice(2))) out.push(d.slice(0, 2) + "9" + d.slice(2));
+  if (d.length === 9 && d[0] === "9") DDDS_REGIAO.forEach(x => out.push(x + d));
+  if (d.length === 8 && cel8(d)) DDDS_REGIAO.forEach(x => out.push(x + "9" + d));
+  return [...new Set(out)].filter(n => CELULAR.test(n));
+}
+
+/** Melhor palpite de número completo (DDD 43 quando faltar), ou "" se não der. */
+export function normalizarWhatsapp(v) {
+  return candidatosWhatsapp(v)[0] || "";
+}
+
+/** Celular BR válido, aceitando número sem DDD ou sem o 9 (completa sozinho). */
 export function whatsappValido(v) {
-  return /^[1-9][1-9]9\d{8}$/.test(soDigitos(v));
+  return !!normalizarWhatsapp(v);
 }
 
 export function formatarWhatsapp(v) {
   const d = soDigitos(v).slice(0, 11);
-  if (d.length <= 2) return d ? `(${d}` : "";
-  if (d.length <= 7) return `(${d.slice(0, 2)}) ${d.slice(2)}`;
-  return `(${d.slice(0, 2)}) ${d.slice(2, 7)}-${d.slice(7)}`;
+  if (d.length === 11) return `(${d.slice(0, 2)}) ${d.slice(2, 7)}-${d.slice(7)}`;
+  if (d.length === 10) return `(${d.slice(0, 2)}) ${d.slice(2, 6)}-${d.slice(6)}`;
+  if (d.length > 4) return `${d.slice(0, -4)}-${d.slice(-4)}`;
+  return d;
 }
 
+/**
+ * Máscara enquanto digita; ao sair do campo, completa DDD/9 que faltarem e
+ * avisa a pessoa para conferir.
+ */
 export function aplicarMascara(input) {
+  const aviso = document.createElement("span");
+  aviso.className = "dica aviso-num";
+  input.after(aviso);
   input.addEventListener("input", () => {
     input.value = formatarWhatsapp(input.value);
     input.classList.remove("invalido");
+    aviso.textContent = "";
+  });
+  input.addEventListener("blur", () => {
+    const d = soDigitos(input.value), n = normalizarWhatsapp(input.value);
+    if (n && n !== d) {
+      input.value = formatarWhatsapp(n);
+      aviso.textContent = d.length < 10
+        ? `Completamos com o DDD ${n.slice(0, 2)}. Confira se está certo.`
+        : "Acrescentamos o 9 do celular. Confira se está certo.";
+    }
   });
 }
 
@@ -146,7 +189,8 @@ export function limparNome(v) {
  * Retorna "novo" ou "repetido".
  */
 export async function salvarLead(origem, dados) {
-  const whatsapp = soDigitos(dados.whatsapp);
+  const whatsapp = normalizarWhatsapp(dados.whatsapp);
+  if (!whatsapp) throw new Error("whatsapp inválido");
   const registro = {
     origem,
     nome: limparNome(dados.nome),
@@ -160,14 +204,33 @@ export async function salvarLead(origem, dados) {
   if (dados.local) registro.local = String(dados.local).trim().slice(0, 80);
   if (dados.cadastradoPor) registro.cadastradoPor = dados.cadastradoPor;
 
+  // Grava junto um "marcador" sem dados pessoais (inscritos/{id}), que serve
+  // só para o "Já me inscrevi" conferir se o número está inscrito.
+  const id = `${origem}_${whatsapp}`;
+  const lote = writeBatch(db);
+  lote.set(doc(db, "leads", id), registro);
+  lote.set(doc(db, "inscritos", id), { criadoEm: serverTimestamp() });
   try {
-    await setDoc(doc(db, "leads", `${origem}_${whatsapp}`), registro);
+    await lote.commit();
     return "novo";
   } catch (e) {
     // Documento já existe → a regra nega (só permite create) → já estava inscrito.
     if (e && e.code === "permission-denied" && configurado) return "repetido";
     throw e;
   }
+}
+
+/**
+ * "Já me inscrevi": confere se o número (mesmo incompleto) está inscrito.
+ * Retorna o número completo encontrado ou null. Só lê o marcador sem dados
+ * pessoais; a lista de inscritos continua fechada.
+ */
+export async function buscarInscricao(origem, digitado) {
+  for (const n of candidatosWhatsapp(digitado)) {
+    const s = await getDoc(doc(db, "inscritos", `${origem}_${n}`));
+    if (s.exists()) return n;
+  }
+  return null;
 }
 
 /** Promise com o usuário logado (ou null). */
