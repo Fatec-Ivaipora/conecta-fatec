@@ -45,10 +45,10 @@
           <span class="dica">É por ele que avisamos quem ganhou.</span>
         </label>
         <label>Cidade
-          <input name="cidade" autocomplete="address-level2" required maxlength="80" placeholder="Ex.: Ivaiporã">
+          <input name="cidade" autocomplete="address-level2" required maxlength="80" placeholder="Comece a digitar: Ivaiporã, Jardim Alegre…">
         </label>
         <label>Escola
-          <input name="escola" required maxlength="120" placeholder="Onde você estuda ou estudou">
+          <input name="escola" required maxlength="120" placeholder="Comece a digitar o nome do colégio">
         </label>
         <label>Curso que te interessa <span class="dica">(opcional)</span>
           <input name="curso" list="cursos" maxlength="80" placeholder="Escolha ou digite">
@@ -77,7 +77,8 @@
 
   <script type="module">
     import { ENEM } from "/js/config.js";
-    import { aplicarMascara, whatsappValido, salvarLead, mostrarMsg, configurado, usuarioAtual } from "/js/base.js";
+    import { CIDADES } from "/js/cidades.js";
+    import { autocompletar, campoEscola, aplicarMascara, whatsappValido, salvarLead, mostrarMsg, configurado, usuarioAtual } from "/js/base.js";
 
     const $ = id => document.getElementById(id);
     const qs = new URLSearchParams(location.search);
@@ -96,6 +97,8 @@
 
     const form = $("form"), msg = $("msg"), btn = $("btn");
     aplicarMascara(form.whatsapp);
+    autocompletar(form.cidade, CIDADES);
+    campoEscola(form);
 
     // Modo barraca: alguém da equipe logado + ?barraca=1
     let equipe = null;
@@ -129,7 +132,7 @@
         return mostrarMsg(msg, "Confira o WhatsApp: DDD + número com 9 dígitos.");
       }
       if (!f.cidade || f.cidade.trim().length < 2) return mostrarMsg(msg, "Digite a cidade.");
-      if (!f.escola || f.escola.trim().length < 2) return mostrarMsg(msg, "Digite a escola.");
+      if (!f.escola || f.escola.trim().length < 2) return mostrarMsg(msg, "Digite a escola ou toque em uma das opções abaixo do campo.");
       if (!form.consentimento.checked) return mostrarMsg(msg, "Marque a autorização para continuar.");
       if (!configurado) return mostrarMsg(msg, "Sistema em configuração: falta colar a config do Firebase.");
 

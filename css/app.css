@@ -141,6 +141,31 @@ input, select {
 }
 input:focus, select:focus { outline: none; border-color: var(--azul); box-shadow: 0 0 0 4px rgba(49, 87, 176, .15); }
 input.invalido { border-color: var(--erro); }
+
+/* Sugestões de cidade */
+.sugestoes {
+  position: absolute; left: 0; right: 0; top: 100%; z-index: 30;
+  margin: 4px 0 0; padding: 6px; list-style: none;
+  background: #fff; border: 1.5px solid var(--linha); border-radius: 12px;
+  box-shadow: 0 14px 30px -12px rgba(1, 36, 87, .35);
+  max-height: 280px; overflow-y: auto;
+}
+.sugestoes li {
+  padding: 11px 12px; border-radius: 8px; cursor: pointer;
+  font-weight: 500; font-size: 15px; color: var(--tinta);
+}
+.sugestoes li b { font-weight: 800; color: var(--azul-noite); }
+.sugestoes li small { display: block; font-size: 12px; font-weight: 600; color: var(--tinta-2); margin-top: 1px; }
+/* Atalhos "Não estou estudando" */
+.atalhos { display: flex; flex-wrap: wrap; gap: 8px; }
+.atalho {
+  font: inherit; font-size: 13px; font-weight: 700; cursor: pointer;
+  border: 1.5px dashed var(--linha); background: var(--fundo); color: var(--tinta-2);
+  border-radius: 999px; padding: 6px 12px;
+}
+.atalho:hover { border-color: var(--azul); color: var(--azul); }
+.atalho.on { border-style: solid; border-color: var(--azul); background: var(--azul); color: #fff; }
+.sugestoes li:hover, .sugestoes li.ativo { background: var(--fundo); color: var(--azul); }
 .dica { font-weight: 500; font-size: 13px; color: var(--tinta-2); }
 .check { display: grid; grid-template-columns: 22px 1fr; gap: 10px; font-weight: 500; font-size: 13px; color: var(--tinta-2); align-items: start; }
 .check input { width: 20px; height: 20px; margin: 1px 0 0; accent-color: var(--azul); }

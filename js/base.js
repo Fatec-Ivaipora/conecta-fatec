@@ -5,6 +5,7 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import { firebaseConfig } from "./config.js";
+import { ESCOLAS, SEM_ESCOLA } from "./escolas.js";
 
 export const app = initializeApp(firebaseConfig);
 export const db = getFirestore(app);
@@ -36,6 +37,99 @@ export function aplicarMascara(input) {
     input.value = formatarWhatsapp(input.value);
     input.classList.remove("invalido");
   });
+}
+
+/**
+ * Sugestões enquanto digita (ignora acento e maiúscula). Continua aceitando
+ * texto livre: a lista só ajuda a preencher.
+ */
+export function autocompletar(input, lista, { prioridade } = {}) {
+  const norm = s => s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+  // Aceita "Nome" ou { n: "Nome", extra: "Cidade" }; busca no nome e no extra.
+  const itens = lista.map(i => typeof i === "string" ? { n: i } : i)
+    .map(i => ({ ...i, k: norm(i.n), ke: norm(i.extra || "") }));
+  const box = document.createElement("ul");
+  box.className = "sugestoes oculto";
+  box.id = `${input.name}-sugestoes`;
+  box.setAttribute("role", "listbox");
+  input.parentElement.style.position = "relative";
+  input.after(box);
+  input.setAttribute("autocomplete", "off");
+  input.setAttribute("role", "combobox");
+  input.setAttribute("aria-autocomplete", "list");
+  input.setAttribute("aria-controls", box.id);
+  input.setAttribute("aria-expanded", "false");
+
+  let vis = [], atual = -1;
+  const fechar = () => { box.classList.add("oculto"); input.setAttribute("aria-expanded", "false"); atual = -1; };
+  const marcar = () => [...box.children].forEach((li, i) => li.classList.toggle("ativo", i === atual));
+  const escolher = i => { input.value = vis[i].n; fechar(); input.classList.remove("invalido"); };
+
+  function abrir() {
+    const q = norm(input.value.trim());
+    if (!q) return fechar();
+    const pri = prioridade ? norm(prioridade() || "") : "";
+    // Palavras soltas: "idalia ivaipora" acha "Colégio Estadual Idália Rocha · Ivaiporã"
+    const termos = q.split(/\s+/).filter(Boolean);
+    vis = itens.filter(i => termos.every(t => i.k.includes(t) || i.ke.includes(t)))
+      .sort((a, b) =>
+        ((pri && b.ke === pri) - (pri && a.ke === pri)) ||
+        (b.k.startsWith(q) - a.k.startsWith(q)) ||
+        a.k.localeCompare(b.k))
+      .slice(0, 8);
+    if (!vis.length || (vis.length === 1 && vis[0].k === q)) return fechar();
+    atual = -1;
+    box.innerHTML = vis.map((i, ix) => {
+      const p = i.k.indexOf(termos[0]);
+      const nome = p < 0 ? i.n
+        : i.n.slice(0, p) + "<b>" + i.n.slice(p, p + termos[0].length) + "</b>" + i.n.slice(p + termos[0].length);
+      return `<li role="option" data-i="${ix}">${nome}${i.extra ? `<small>${i.extra}</small>` : ""}</li>`;
+    }).join("");
+    box.classList.remove("oculto");
+    input.setAttribute("aria-expanded", "true");
+  }
+
+  input.addEventListener("input", abrir);
+  input.addEventListener("focus", abrir);
+  input.addEventListener("blur", () => setTimeout(fechar, 150));
+  input.addEventListener("keydown", e => {
+    if (box.classList.contains("oculto")) return;
+    if (e.key === "ArrowDown" || e.key === "ArrowUp") {
+      e.preventDefault();
+      atual = (atual + (e.key === "ArrowDown" ? 1 : -1) + vis.length) % vis.length;
+      marcar();
+    } else if (e.key === "Enter" && atual >= 0) {
+      e.preventDefault(); escolher(atual);
+    } else if (e.key === "Escape") fechar();
+  });
+  box.addEventListener("mousedown", e => e.preventDefault()); // não tira o foco do campo
+  box.addEventListener("click", e => {
+    const li = e.target.closest("li");
+    if (li) escolher(+li.dataset.i);
+  });
+}
+
+/**
+ * Campo "Escola": sugestões dos colégios (os da cidade escolhida primeiro)
+ * + atalhos "Não estou estudando" / "Já terminei o ensino médio".
+ */
+export function campoEscola(form) {
+  const input = form.escola;
+  autocompletar(input, ESCOLAS, { prioridade: () => form.cidade?.value });
+  const div = document.createElement("div");
+  div.className = "atalhos";
+  div.innerHTML = SEM_ESCOLA.map(t => `<button type="button" class="atalho">${t}</button>`).join("");
+  input.closest("label").after(div);
+  const botoes = [...div.children];
+  div.addEventListener("click", e => {
+    const b = e.target.closest(".atalho"); if (!b) return;
+    const ligar = !b.classList.contains("on");
+    botoes.forEach(x => x.classList.remove("on"));
+    if (ligar) { b.classList.add("on"); input.value = b.textContent; input.classList.remove("invalido"); }
+    else { input.value = ""; input.focus(); }
+  });
+  input.addEventListener("input", () => botoes.forEach(x => x.classList.remove("on")));
+  form.addEventListener("reset", () => botoes.forEach(x => x.classList.remove("on")));
 }
 
 /** Primeira letra de cada palavra maiúscula, tirando espaços sobrando. */

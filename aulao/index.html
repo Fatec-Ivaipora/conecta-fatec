@@ -124,10 +124,10 @@
               <span class="dica">É por ele que você recebe o link e o lembrete do aulão.</span>
             </label>
             <label>Cidade
-              <input name="cidade" autocomplete="address-level2" required maxlength="80" placeholder="Ex.: Ivaiporã">
+              <input name="cidade" autocomplete="address-level2" required maxlength="80" placeholder="Comece a digitar: Ivaiporã, Jardim Alegre…">
             </label>
             <label>Escola
-              <input name="escola" required maxlength="120" placeholder="Onde você estuda ou estudou">
+              <input name="escola" required maxlength="120" placeholder="Comece a digitar o nome do colégio">
             </label>
             <label class="check">
               <input type="checkbox" name="consentimento" required>
@@ -155,13 +155,16 @@
 
   <script type="module">
     import { AULAO } from "/js/config.js";
-    import { aplicarMascara, whatsappValido, salvarLead, mostrarMsg, configurado } from "/js/base.js";
+    import { CIDADES } from "/js/cidades.js";
+    import { autocompletar, campoEscola, aplicarMascara, whatsappValido, salvarLead, mostrarMsg, configurado } from "/js/base.js";
 
     const $ = id => document.getElementById(id);
     if (AULAO.bioProfessor) $("bio").textContent = AULAO.bioProfessor;
 
     const form = $("form"), msg = $("msg"), btn = $("btn");
     aplicarMascara(form.whatsapp);
+    autocompletar(form.cidade, CIDADES);
+    campoEscola(form);
 
     // Link para salvar na agenda do Google
     const fmt = s => new Date(s).toISOString().replace(/[-:]|\.\d{3}/g, "");
@@ -193,7 +196,7 @@
         return mostrarMsg(msg, "Confira o WhatsApp: DDD + número com 9 dígitos.");
       }
       if (!f.cidade || f.cidade.trim().length < 2) return mostrarMsg(msg, "Digite sua cidade.");
-      if (!f.escola || f.escola.trim().length < 2) return mostrarMsg(msg, "Digite sua escola.");
+      if (!f.escola || f.escola.trim().length < 2) return mostrarMsg(msg, "Digite sua escola ou toque em uma das opções abaixo do campo.");
       if (!form.consentimento.checked) return mostrarMsg(msg, "Marque a autorização para continuar.");
       if (!configurado) return mostrarMsg(msg, "Sistema em configuração: falta colar a config do Firebase.");
 
