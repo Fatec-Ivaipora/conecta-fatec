@@ -25,7 +25,7 @@ service cloud.firestore {
         && str(d.nome, 3, 120)
         && str(d.cidade, 2, 80)
         && str(d.escola, 2, 120)
-        && (!('curso' in d) || str(d.curso, 1, 80))
+        && (!('curso' in d) || str(d.curso, 1, 400))
         && (!('local' in d) || str(d.local, 1, 80))
         && d.consentimento == true
         && d.criadoEm == request.time

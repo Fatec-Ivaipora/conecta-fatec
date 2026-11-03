@@ -50,10 +50,10 @@
         <label>Escola
           <input name="escola" required maxlength="120" placeholder="Comece a digitar o nome do colégio">
         </label>
-        <label>Curso que te interessa <span class="dica">(opcional)</span>
-          <input name="curso" list="cursos" maxlength="80" placeholder="Escolha ou digite">
-          <datalist id="cursos"></datalist>
-        </label>
+        <fieldset class="cursos-box">
+          <legend>Cursos que te interessam <span class="dica">(pode marcar mais de um · opcional)</span></legend>
+          <div class="chips" id="cursos"></div>
+        </fieldset>
         <label class="check">
           <input type="checkbox" name="consentimento" required>
           <span>Autorizo a Fatec Ivaiporã a usar meus dados para o sorteio e para enviar informações sobre cursos e o vestibular, conforme a LGPD.</span>
@@ -95,7 +95,16 @@
 
     $("seloDia").textContent = dia.rotulo;
     $("premio").textContent = ENEM.premio;
-    $("cursos").innerHTML = ENEM.cursos.map(c => `<option value="${c}">`).join("");
+    // Cursos: botões para marcar um ou mais. "Ainda não sei" desmarca os outros (e vice-versa).
+    const NAO_SEI = "Ainda não sei";
+    $("cursos").innerHTML = [...ENEM.cursos, NAO_SEI].map(c =>
+      `<label class="chip${c === NAO_SEI ? " chip-nao-sei" : ""}"><input type="checkbox" name="curso" value="${c}"><span>${c}</span></label>`).join("");
+    $("cursos").addEventListener("change", e => {
+      const caixas = [...$("cursos").querySelectorAll("input")];
+      if (e.target.value === NAO_SEI && e.target.checked) caixas.forEach(c => { if (c !== e.target) c.checked = false; });
+      else if (e.target.checked) caixas.find(c => c.value === NAO_SEI).checked = false;
+    });
+    const cursosMarcados = () => [...$("cursos").querySelectorAll("input:checked")].map(c => c.value).join(", ");
 
     const form = $("form"), msg = $("msg"), btn = $("btn");
     aplicarMascara(form.whatsapp);
@@ -140,7 +149,7 @@
 
       btn.disabled = true; btn.textContent = "Enviando…";
       try {
-        const r = await salvarLead(dia.origem, { ...f, local, cadastradoPor: equipe?.email });
+        const r = await salvarLead(dia.origem, { ...f, curso: cursosMarcados(), local, cadastradoPor: equipe?.email });
         $("cardForm").classList.add("oculto");
         $("cardOk").classList.remove("oculto");
         if (r === "repetido") {

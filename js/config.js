@@ -48,10 +48,12 @@ export const ENEM = {
   ],
   // O que a pessoa concorre (aparece no formulário). Ex.: "uma garrafa térmica da Fatec"
   premio: "um brinde exclusivo da Fatec Ivaiporã",
-  // Sugestões do campo "Curso de interesse" (a pessoa também pode digitar outro).
-  // CONFERIR a lista oficial de cursos do Vestibular 2027.
+  // Cursos da Fatec (botões para marcar um ou mais; "Ainda não sei" entra sozinho no fim).
   cursos: [
-    "Agronomia", "Análise e Desenvolvimento de Sistemas", "Direito", "Medicina", "Ainda não sei",
+    "Agronomia", "Arquitetura e Urbanismo", "Biomedicina", "Ciências Contábeis", "Direito",
+    "Enfermagem", "Engenharia Civil", "Fisioterapia", "Gestão Comercial", "Gestão do Agronegócio",
+    "Gestão Financeira", "Gestão de Recursos Humanos", "Medicina", "Medicina Veterinária",
+    "Pedagogia", "Psicologia",
   ],
 };
 

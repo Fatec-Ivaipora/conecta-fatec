@@ -213,3 +213,17 @@ footer b { color: var(--azul); }
 
 .aviso-num:empty { display: none; }
 .aviso-num { color: #0B5CD6; font-weight: 700; }
+
+/* Cursos: botões para marcar um ou mais */
+.cursos-box { border: 0; margin: 0; padding: 0; min-width: 0; }
+.cursos-box legend { font-weight: 700; font-size: 14px; color: var(--azul-noite); padding: 0; margin-bottom: 8px; }
+.cursos-box legend .dica { font-weight: 500; }
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip { display: inline-flex; cursor: pointer; font-weight: 600; font-size: 14px; }
+.chip input { position: absolute; opacity: 0; pointer-events: none; }
+.chip span { border: 1.5px solid var(--linha); background: #fff; color: var(--tinta); border-radius: 999px; padding: 8px 14px; transition: background .12s, border-color .12s; }
+.chip:hover span { border-color: var(--azul); }
+.chip input:checked + span { background: var(--azul); border-color: var(--azul); color: #fff; }
+.chip input:checked + span::before { content: "✓ "; }
+.chip input:focus-visible + span { outline: 3px solid rgba(49, 87, 176, .35); outline-offset: 2px; }
+.chip-nao-sei span { border-style: dashed; color: var(--tinta-2); }

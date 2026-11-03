@@ -200,7 +200,7 @@ export async function salvarLead(origem, dados) {
     consentimento: true,
     criadoEm: serverTimestamp(),
   };
-  if (dados.curso) registro.curso = String(dados.curso).trim();
+  if (dados.curso) registro.curso = String(dados.curso).trim().slice(0, 400);
   if (dados.local) registro.local = String(dados.local).trim().slice(0, 80);
   if (dados.cadastradoPor) registro.cadastradoPor = dados.cadastradoPor;
 
