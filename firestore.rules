@@ -3,11 +3,11 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{db}/documents {
 
-    // Equipe = quem entrou com Google usando e-mail @fatecivaipora.com.br.
+    // Admin = só quem entrou com Google usando estes e-mails.
     function isEquipe() {
       return request.auth != null
         && request.auth.token.email_verified == true
-        && request.auth.token.email.lower().matches('.*@fatecivaipora[.]com[.]br$');
+        && request.auth.token.email.lower() in ['dados@fatecivaipora.com.br'];
     }
 
     function str(v, min, max) {
@@ -32,10 +32,6 @@ service cloud.firestore {
         && (!('cadastradoPor' in d) || (isEquipe() && d.cadastradoPor == request.auth.token.email));
     }
 
-    match /equipe/{email} {
-      allow read: if isEquipe();
-      allow write: if false; // cadastrar membros pelo console
-    }
 
     match /leads/{id} {
       allow create: if leadValido(id);          // público: só cria, nunca lê
