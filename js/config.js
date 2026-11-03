@@ -17,7 +17,7 @@ export const AULAO = {
   origem: "aulao-redacao-2026",
   // Link do Zoom: aparece para a pessoa logo depois que ela se inscreve.
   // Se ficar vazio, a tela avisa que o link será enviado pelo WhatsApp.
-  zoomLink: "",
+  zoomLink: "https://us02web.zoom.us/j/83670217677?pwd=cXo5LzlvK2IweXJQYVVpOW93VWtmUT09",
   // Mini bio do prof. Carlos Durlo (pegar com ele). Vazio = mostra só o nome.
   bioProfessor: "",
   inicio: "2026-11-07T14:00:00-03:00",

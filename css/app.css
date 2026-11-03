@@ -179,6 +179,7 @@ input.invalido { border-color: var(--erro); }
 .btn:active { transform: translateY(4px); box-shadow: 0 2px 0 #B5340F; }
 .btn:disabled { opacity: .6; cursor: wait; }
 .btn.azul { background: var(--azul); box-shadow: 0 6px 0 var(--azul-noite); }
+.btn.whats { background: #25D366; color: #fff; box-shadow: 0 6px 0 #128C4B; }
 .btn.claro { background: #fff; color: var(--azul-noite); border: 1.5px solid var(--linha); box-shadow: none; font-size: 15px; }
 .btn.pequeno { width: auto; padding: 10px 14px; font-size: 14px; }
 .msg { border-radius: 12px; padding: 12px 14px; font-size: 14px; font-weight: 600; }
