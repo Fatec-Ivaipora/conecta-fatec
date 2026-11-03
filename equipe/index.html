@@ -137,7 +137,7 @@
     let leads = [], origemAtual = "", usuario = null;
 
     // ---------- Login ----------
-    const ADMINS = ["suporteavafatec@gmail.com"]; // quem pode entrar no painel
+    const ADMINS = ["suporte.ava@fatecivaipora.com.br", "suporteavafatec@gmail.com"]; // quem pode entrar no painel
     const ehAdmin = u => !!u && ADMINS.includes((u.email || "").toLowerCase());
     $("entrarGoogle").onclick = async () => {
       const prov = new GoogleAuthProvider();

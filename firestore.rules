@@ -7,7 +7,7 @@ service cloud.firestore {
     function isEquipe() {
       return request.auth != null
         && request.auth.token.email_verified == true
-        && request.auth.token.email.lower() in ['suporteavafatec@gmail.com'];
+        && request.auth.token.email.lower() in ['suporte.ava@fatecivaipora.com.br', 'suporteavafatec@gmail.com'];
     }
 
     function str(v, min, max) {
