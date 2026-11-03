@@ -137,11 +137,11 @@
     let leads = [], origemAtual = "", usuario = null;
 
     // ---------- Login ----------
-    const ADMINS = ["dados@fatecivaipora.com.br"]; // quem pode entrar no painel
+    const ADMINS = ["suporteavafatec@gmail.com"]; // quem pode entrar no painel
     const ehAdmin = u => !!u && ADMINS.includes((u.email || "").toLowerCase());
     $("entrarGoogle").onclick = async () => {
       const prov = new GoogleAuthProvider();
-      prov.setCustomParameters({ hd: "fatecivaipora.com.br", prompt: "select_account" });
+      prov.setCustomParameters({ prompt: "select_account" });
       try {
         const { user } = await signInWithPopup(auth, prov);
         if (!ehAdmin(user)) {
