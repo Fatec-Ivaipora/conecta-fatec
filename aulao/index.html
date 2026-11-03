@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Redação Descomplicada ENEM 2026 · Conecta Fatec</title>
+  <meta name="description" content="Aulão gratuito e ao vivo de redação com o prof. Carlos Durlo, na véspera do ENEM. Sábado, 07/11, das 14h às 17h, on-line.">
+  <meta property="og:title" content="Redação Descomplicada ENEM 2026 · aulão gratuito">
+  <meta property="og:description" content="Sábado, 07/11, das 14h às 17h, on-line, com o prof. Carlos Durlo. Garanta sua vaga.">
+  <meta property="og:image" content="/kv/carlos-durlo.jpg">
+  <meta name="theme-color" content="#3157B0">
+  <link rel="icon" href="/kv/fatec-logo.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Montserrat:wght@500;600;700;800&family=Unbounded:wght@700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/app.css">
+</head>
+<body>
+  <section class="hero">
+    <div class="topo" style="padding-bottom:0">
+      <img class="fatec" src="/kv/fatec-logo.svg" alt="Fatec Ivaiporã" style="filter:brightness(0) invert(1)">
+    </div>
+    <div class="hero-in">
+      <div>
+        <span class="selo">Aulão gratuito · ao vivo <span class="pontos"><i></i><i></i><i></i></span></span>
+        <h1>Redação Descomplicada <span class="script">ENEM 2026</span></h1>
+        <p class="lead">Na véspera da prova, um aulão gratuito e ao vivo com o prof. Carlos Durlo para você chegar à redação sabendo o que fazer.</p>
+        <div class="infos">
+          <div class="info"><b>Quando</b>Sábado, 07/11</div>
+          <div class="info"><b>Horário</b>14h às 17h</div>
+          <div class="info"><b>Onde</b>On-line, pelo Zoom</div>
+          <div class="info"><b>Valor</b>Gratuito</div>
+        </div>
+        <a class="btn so-celular" href="#cardForm" style="margin-top:22px">Quero minha vaga</a>
+      </div>
+      <div class="hero-foto"><img src="/kv/carlos-durlo.jpg" alt="Prof. Carlos Durlo"></div>
+    </div>
+  </section>
+
+  <main class="wrap">
+    <div class="grade">
+      <div>
+        <h2 class="secao-titulo">O que você vai ver <span class="script">no aulão</span></h2>
+        <ul class="topicos">
+          <li><span class="n">1</span><div><strong>Leitura e interpretação</strong><span>Técnicas para partir do texto base e desenvolver o tema proposto.</span></div></li>
+          <li><span class="n">2</span><div><strong>Estrutura do texto</strong><span>Como montar o título, quantos parágrafos usar e o que abordar em cada um, com começo, meio e fim.</span></div></li>
+          <li><span class="n">3</span><div><strong>Revisão completa</strong><span>A mesma que o professor faz com os alunos dele: as pegadinhas, os erros e os acertos.</span></div></li>
+          <li><span class="n">4</span><div><strong>Dicas para a hora H</strong><span>O que ajuda a se sair bem na prova e que nem todo mundo conta.</span></div></li>
+        </ul>
+
+        <div class="prof">
+          <img src="/kv/carlos-durlo.jpg" alt="Prof. Carlos Durlo">
+          <div>
+            <div class="quem">Quem conduz</div>
+            <div class="nome">Prof. Carlos Durlo</div>
+            <div class="bio" id="bio"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-col">
+        <div class="card" id="cardForm">
+          <h2>Garanta sua vaga</h2>
+          <form id="form" novalidate>
+            <label>Nome completo
+              <input name="nome" autocomplete="name" required maxlength="120" placeholder="Seu nome">
+            </label>
+            <label>WhatsApp
+              <input name="whatsapp" type="tel" inputmode="numeric" autocomplete="tel-national" required placeholder="(43) 99999-9999">
+              <span class="dica">É por ele que você recebe o link e o lembrete do aulão.</span>
+            </label>
+            <label>Cidade
+              <input name="cidade" autocomplete="address-level2" required maxlength="80" placeholder="Ex.: Ivaiporã">
+            </label>
+            <label>Escola
+              <input name="escola" required maxlength="120" placeholder="Onde você estuda ou estudou">
+            </label>
+            <label class="check">
+              <input type="checkbox" name="consentimento" required>
+              <span>Autorizo a Fatec Ivaiporã a usar meus dados para enviar informações sobre este aulão, cursos e o vestibular, conforme a LGPD.</span>
+            </label>
+            <div id="msg" class="oculto"></div>
+            <button class="btn" type="submit" id="btn">Quero minha vaga</button>
+          </form>
+        </div>
+
+        <div class="card sucesso oculto" id="cardOk">
+          <div class="icone">✓</div>
+          <h2 id="okTitulo">Vaga garantida!</h2>
+          <p id="okTexto">Sábado, 07/11, às 14h. Chegue uns 10 minutos antes.</p>
+          <div class="acoes">
+            <a class="btn azul" id="btnZoom" target="_blank" rel="noopener">Entrar no Zoom</a>
+            <a class="btn claro" id="btnAgenda" target="_blank" rel="noopener">Salvar na minha agenda</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <footer><b>Conecta Fatec</b> · Fatec Ivaiporã · Vest Connect 2027 · #vempramelhor</footer>
+
+  <script type="module">
+    import { AULAO } from "/js/config.js";
+    import { aplicarMascara, whatsappValido, salvarLead, mostrarMsg, configurado } from "/js/base.js";
+
+    const $ = id => document.getElementById(id);
+    if (AULAO.bioProfessor) $("bio").textContent = AULAO.bioProfessor;
+
+    const form = $("form"), msg = $("msg"), btn = $("btn");
+    aplicarMascara(form.whatsapp);
+
+    // Link para salvar na agenda do Google
+    const fmt = s => new Date(s).toISOString().replace(/[-:]|\.\d{3}/g, "");
+    $("btnAgenda").href = "https://calendar.google.com/calendar/render?action=TEMPLATE"
+      + "&text=" + encodeURIComponent("Aulão Redação Descomplicada ENEM 2026 · Fatec Ivaiporã")
+      + "&dates=" + fmt(AULAO.inicio) + "/" + fmt(AULAO.fim)
+      + "&details=" + encodeURIComponent("Aulão gratuito com o prof. Carlos Durlo." + (AULAO.zoomLink ? "\nZoom: " + AULAO.zoomLink : ""));
+
+    function sucesso(repetido) {
+      $("cardForm").classList.add("oculto");
+      $("cardOk").classList.remove("oculto");
+      if (repetido) $("okTitulo").textContent = "Você já estava inscrito!";
+      if (AULAO.zoomLink) {
+        $("btnZoom").href = AULAO.zoomLink;
+      } else {
+        $("btnZoom").classList.add("oculto");
+        $("okTexto").textContent = "Sábado, 07/11, às 14h. O link do Zoom chega no seu WhatsApp antes do aulão.";
+      }
+      $("cardOk").scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+
+    form.addEventListener("submit", async e => {
+      e.preventDefault();
+      msg.className = "oculto";
+      const f = Object.fromEntries(new FormData(form));
+      if (!f.nome || f.nome.trim().length < 3) return mostrarMsg(msg, "Digite seu nome completo.");
+      if (!whatsappValido(f.whatsapp)) {
+        form.whatsapp.classList.add("invalido");
+        return mostrarMsg(msg, "Confira o WhatsApp: DDD + número com 9 dígitos.");
+      }
+      if (!f.cidade || f.cidade.trim().length < 2) return mostrarMsg(msg, "Digite sua cidade.");
+      if (!f.escola || f.escola.trim().length < 2) return mostrarMsg(msg, "Digite sua escola.");
+      if (!form.consentimento.checked) return mostrarMsg(msg, "Marque a autorização para continuar.");
+      if (!configurado) return mostrarMsg(msg, "Sistema em configuração: falta colar a config do Firebase.");
+
+      btn.disabled = true; btn.textContent = "Enviando…";
+      try {
+        const r = await salvarLead(AULAO.origem, f);
+        sucesso(r === "repetido");
+      } catch (err) {
+        console.error(err);
+        mostrarMsg(msg, "Não conseguimos enviar agora. Confira sua internet e tente de novo.");
+      } finally {
+        btn.disabled = false; btn.textContent = "Quero minha vaga";
+      }
+    });
+  </script>
+</body>
+</html>

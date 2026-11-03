@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Conecta Fatec · Fatec Ivaiporã</title>
+  <meta name="theme-color" content="#3157B0">
+  <link rel="icon" href="/kv/fatec-logo.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Montserrat:wght@500;600;700;800&family=Unbounded:wght@700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/app.css">
+  <style>
+    .opcoes { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); }
+    .opcao { text-decoration: none; color: inherit; display: grid; gap: 6px; transition: transform .15s; }
+    .opcao:hover { transform: translateY(-3px); }
+    .opcao .selo { margin-bottom: 6px; }
+    .opcao h2 { margin: 0; }
+    .opcao p { margin: 0; color: var(--tinta-2); }
+  </style>
+</head>
+<body>
+  <section class="hero">
+    <div class="topo" style="padding-bottom:0">
+      <img class="fatec" src="/kv/fatec-logo.svg" alt="Fatec Ivaiporã" style="filter:brightness(0) invert(1)">
+    </div>
+    <div class="hero-in">
+      <div>
+        <span class="selo">Conecta Fatec <span class="pontos"><i></i><i></i><i></i></span></span>
+        <h1>A Fatec perto <span class="script">de você</span></h1>
+      </div>
+    </div>
+  </section>
+  <main class="wrap">
+    <div class="opcoes">
+      <a class="card opcao" href="/aulao/">
+        <span class="selo">Sábado · 07/11</span>
+        <h2>Aulão Redação Descomplicada</h2>
+        <p>Gratuito e on-line, com o prof. Carlos Durlo, na véspera do ENEM.</p>
+      </a>
+      <a class="card opcao" href="/enem/">
+        <span class="selo" style="background:var(--azul)">ENEM · 08 e 15/11</span>
+        <h2>Concorra a um brinde</h2>
+        <p>Passou na barraca da Fatec? Cadastre-se e participe do sorteio.</p>
+      </a>
+    </div>
+  </main>
+  <footer><b>Conecta Fatec</b> · Fatec Ivaiporã · #vempramelhor · <a href="/equipe/">Equipe</a></footer>
+</body>
+</html>

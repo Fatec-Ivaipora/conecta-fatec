@@ -1,0 +1,154 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Concorra a um brinde · Conecta Fatec</title>
+  <meta name="description" content="Fez o ENEM? Cadastre-se e concorra a um brinde da Fatec Ivaiporã.">
+  <meta name="theme-color" content="#3157B0">
+  <link rel="icon" href="/kv/fatec-logo.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Montserrat:wght@500;600;700;800&family=Unbounded:wght@700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/app.css">
+  <style>
+    .hero-in { padding-bottom: 92px; }
+    .wrap.enem { margin-top: -64px; position: relative; max-width: 560px; padding-top: 0; }
+    .hero h1 { font-size: clamp(32px, 9vw, 54px); }
+  </style>
+</head>
+<body>
+  <div class="faixa-equipe oculto" id="faixaEquipe">Modo barraca · cadastrando por <span id="quem"></span></div>
+
+  <section class="hero">
+    <div class="topo" style="padding-bottom:0">
+      <img class="fatec" src="/kv/fatec-logo.svg" alt="Fatec Ivaiporã" style="filter:brightness(0) invert(1)">
+      <span class="selo" id="seloDia">ENEM 2026</span>
+    </div>
+    <div class="hero-in">
+      <div>
+        <h1>Fez a prova? <span class="script">Agora é sua vez de ganhar!</span></h1>
+        <p class="lead">Deixe seus dados e concorra a <b id="premio"></b>. Quem ganhar é avisado pelo WhatsApp.</p>
+      </div>
+    </div>
+  </section>
+
+  <main class="wrap enem">
+    <div class="card" id="cardForm">
+      <h2>Quero concorrer</h2>
+      <form id="form" novalidate>
+        <label>Nome completo
+          <input name="nome" autocomplete="name" required maxlength="120" placeholder="Seu nome">
+        </label>
+        <label>WhatsApp
+          <input name="whatsapp" type="tel" inputmode="numeric" autocomplete="tel-national" required placeholder="(43) 99999-9999">
+          <span class="dica">É por ele que avisamos quem ganhou.</span>
+        </label>
+        <label>Cidade
+          <input name="cidade" autocomplete="address-level2" required maxlength="80" placeholder="Ex.: Ivaiporã">
+        </label>
+        <label>Escola
+          <input name="escola" required maxlength="120" placeholder="Onde você estuda ou estudou">
+        </label>
+        <label>Curso que te interessa <span class="dica">(opcional)</span>
+          <input name="curso" list="cursos" maxlength="80" placeholder="Escolha ou digite">
+          <datalist id="cursos"></datalist>
+        </label>
+        <label class="check">
+          <input type="checkbox" name="consentimento" required>
+          <span>Autorizo a Fatec Ivaiporã a usar meus dados para o sorteio e para enviar informações sobre cursos e o vestibular, conforme a LGPD.</span>
+        </label>
+        <div id="msg" class="oculto"></div>
+        <button class="btn" type="submit" id="btn">Quero concorrer</button>
+      </form>
+    </div>
+
+    <div class="card sucesso oculto" id="cardOk">
+      <div class="icone">✓</div>
+      <h2 id="okTitulo">Você está concorrendo!</h2>
+      <p id="okTexto">Fique de olho no WhatsApp. Boa sorte, e boa prova!</p>
+      <div class="acoes">
+        <button class="btn azul oculto" id="btnProximo" type="button">Cadastrar próxima pessoa</button>
+      </div>
+    </div>
+  </main>
+
+  <footer><b>Conecta Fatec</b> · Fatec Ivaiporã · Vest Connect 2027 · #vempramelhor</footer>
+
+  <script type="module">
+    import { ENEM } from "/js/config.js";
+    import { aplicarMascara, whatsappValido, salvarLead, mostrarMsg, configurado, usuarioAtual } from "/js/base.js";
+
+    const $ = id => document.getElementById(id);
+    const qs = new URLSearchParams(location.search);
+
+    // Dia do sorteio: ?dia=08 ou ?dia=15 força; senão usa a data de hoje
+    // (até 08/11 conta como dia 08; depois, dia 15).
+    const hoje = new Date().toLocaleDateString("sv-SE", { timeZone: "America/Sao_Paulo" });
+    const forcado = qs.get("dia");
+    const dia = ENEM.dias.find(d => forcado && d.data.endsWith("-" + forcado.padStart(2, "0")))
+      || (hoje <= ENEM.dias[0].data ? ENEM.dias[0] : ENEM.dias[ENEM.dias.length - 1]);
+    const local = (qs.get("local") || "").trim();
+
+    $("seloDia").textContent = dia.rotulo;
+    $("premio").textContent = ENEM.premio;
+    $("cursos").innerHTML = ENEM.cursos.map(c => `<option value="${c}">`).join("");
+
+    const form = $("form"), msg = $("msg"), btn = $("btn");
+    aplicarMascara(form.whatsapp);
+
+    // Modo barraca: alguém da equipe logado + ?barraca=1
+    let equipe = null;
+    if (qs.get("barraca") === "1") {
+      equipe = await usuarioAtual();
+      if (equipe) {
+        $("faixaEquipe").classList.remove("oculto");
+        $("quem").textContent = equipe.email;
+        $("btnProximo").classList.remove("oculto");
+        form.consentimento.parentElement.querySelector("span").textContent =
+          "A pessoa autorizou o uso dos dados para o sorteio e contato da Fatec (LGPD).";
+      }
+    }
+
+    $("btnProximo").addEventListener("click", () => {
+      form.reset();
+      $("okTitulo").textContent = "Você está concorrendo!";
+      $("okTexto").textContent = "Fique de olho no WhatsApp. Boa sorte, e boa prova!";
+      $("cardOk").classList.add("oculto");
+      $("cardForm").classList.remove("oculto");
+      form.nome.focus();
+    });
+
+    form.addEventListener("submit", async e => {
+      e.preventDefault();
+      msg.className = "oculto";
+      const f = Object.fromEntries(new FormData(form));
+      if (!f.nome || f.nome.trim().length < 3) return mostrarMsg(msg, "Digite o nome completo.");
+      if (!whatsappValido(f.whatsapp)) {
+        form.whatsapp.classList.add("invalido");
+        return mostrarMsg(msg, "Confira o WhatsApp: DDD + número com 9 dígitos.");
+      }
+      if (!f.cidade || f.cidade.trim().length < 2) return mostrarMsg(msg, "Digite a cidade.");
+      if (!f.escola || f.escola.trim().length < 2) return mostrarMsg(msg, "Digite a escola.");
+      if (!form.consentimento.checked) return mostrarMsg(msg, "Marque a autorização para continuar.");
+      if (!configurado) return mostrarMsg(msg, "Sistema em configuração: falta colar a config do Firebase.");
+
+      btn.disabled = true; btn.textContent = "Enviando…";
+      try {
+        const r = await salvarLead(dia.origem, { ...f, local, cadastradoPor: equipe?.email });
+        $("cardForm").classList.add("oculto");
+        $("cardOk").classList.remove("oculto");
+        if (r === "repetido") {
+          $("okTitulo").textContent = "Esse WhatsApp já está concorrendo!";
+          $("okTexto").textContent = "Cada pessoa participa uma vez por dia. Boa sorte!";
+        }
+      } catch (err) {
+        console.error(err);
+        mostrarMsg(msg, "Não conseguimos enviar agora. Confira a internet e tente de novo.");
+      } finally {
+        btn.disabled = false; btn.textContent = "Quero concorrer";
+      }
+    });
+  </script>
+</body>
+</html>

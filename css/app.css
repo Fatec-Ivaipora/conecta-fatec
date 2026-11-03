@@ -1,0 +1,186 @@
+/* Visual da campanha Vest Connect 2027 — cores do KV */
+:root {
+  --azul: #3157B0;
+  --azul-noite: #012457;
+  --sky: #58AEE6;
+  --laranja: #F04E23;
+  --amarelo: #FCD116;
+  --fundo: #EEF5FC;
+  --carta: #FFFFFF;
+  --linha: #D9E5F2;
+  --tinta: #0E2140;
+  --tinta-2: #516684;
+  --ok: #0E8A5F;
+  --ok-fundo: #E9F7F1;
+  --erro: #C2361A;
+  --erro-fundo: #FDECE6;
+  --raio: 18px;
+  --display: "Unbounded", "Montserrat", sans-serif;
+  --texto: "Montserrat", system-ui, sans-serif;
+  --script: "Caveat", cursive;
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; }
+body {
+  font-family: var(--texto);
+  color: var(--tinta);
+  background: var(--fundo);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+img { max-width: 100%; display: block; }
+a { color: var(--azul); }
+
+/* ---------- Topo ---------- */
+.topo {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 16px; padding: 14px 20px;
+  max-width: 1080px; margin: 0 auto;
+}
+.topo img.fatec { height: 34px; }
+.topo img.vest { height: 30px; }
+
+/* ---------- Hero ---------- */
+.hero {
+  position: relative; overflow: hidden;
+  background: var(--azul); color: #fff;
+}
+.hero::after { /* faixa amarela + laranja do KV */
+  content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 14px;
+  background: linear-gradient(100deg, var(--amarelo) 0 34%, var(--laranja) 34% 100%);
+}
+.hero-in {
+  max-width: 1080px; margin: 0 auto; padding: 40px 20px 64px;
+  display: grid; gap: 28px; grid-template-columns: 1fr;
+}
+.selo {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--laranja); color: #fff;
+  font-weight: 800; font-size: 13px; letter-spacing: .08em; text-transform: uppercase;
+  padding: 6px 14px; border-radius: 999px; width: fit-content;
+}
+.pontos { display: inline-flex; gap: 5px; }
+.pontos i { width: 7px; height: 7px; border-radius: 50%; border: 1.5px solid #fff; }
+.pontos i:last-child { background: var(--amarelo); border-color: var(--amarelo); }
+.hero h1 {
+  font-family: var(--display); font-weight: 800;
+  font-size: clamp(34px, 7vw, 64px); line-height: 1.02; margin: 14px 0 6px;
+  letter-spacing: -.01em;
+}
+.hero h1 .script {
+  display: block; font-family: var(--script); font-weight: 700;
+  color: var(--amarelo); font-size: .82em; letter-spacing: 0; margin-top: 4px;
+}
+.hero p.lead { font-size: clamp(16px, 2.2vw, 19px); max-width: 560px; margin: 10px 0 0; opacity: .95; }
+.infos { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 22px; }
+.info {
+  background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.25);
+  border-radius: 12px; padding: 10px 14px; font-weight: 600; font-size: 15px;
+}
+.info b { display: block; font-size: 11px; text-transform: uppercase; letter-spacing: .1em; color: var(--sky); font-weight: 800; }
+
+/* ---------- Layout ---------- */
+.wrap { max-width: 1080px; margin: 0 auto; padding: 32px 20px 56px; }
+.grade { display: grid; gap: 24px; grid-template-columns: 1fr; }
+@media (min-width: 900px) {
+  .hero-in { grid-template-columns: 1.25fr .75fr; align-items: end; padding-top: 56px; }
+  .grade { grid-template-columns: 1.1fr .9fr; align-items: start; }
+  .grade .form-col { position: sticky; top: 20px; }
+}
+
+.card {
+  background: var(--carta); border: 1px solid var(--linha);
+  border-radius: var(--raio); padding: 24px;
+  box-shadow: 0 10px 30px -18px rgba(1, 36, 87, .35);
+}
+.card h2 { font-family: var(--display); font-size: 20px; margin: 0 0 14px; color: var(--azul-noite); }
+.secao-titulo {
+  font-family: var(--display); font-size: 22px; color: var(--azul-noite); margin: 0 0 16px;
+}
+.secao-titulo .script { font-family: var(--script); color: var(--laranja); font-size: 1.25em; font-weight: 700; }
+
+/* Lista de tópicos */
+.topicos { list-style: none; margin: 0; padding: 0; display: grid; gap: 12px; }
+.topicos li {
+  display: grid; grid-template-columns: 40px 1fr; gap: 12px; align-items: start;
+  background: var(--carta); border: 1px solid var(--linha); border-radius: 14px; padding: 14px;
+}
+.topicos .n {
+  width: 40px; height: 40px; border-radius: 12px; display: grid; place-items: center;
+  background: var(--azul); color: #fff; font-family: var(--display); font-weight: 800;
+}
+.topicos li:nth-child(2) .n { background: var(--laranja); }
+.topicos li:nth-child(3) .n { background: var(--sky); }
+.topicos li:nth-child(4) .n { background: var(--amarelo); color: var(--azul-noite); }
+.topicos strong { display: block; color: var(--azul-noite); }
+.topicos span { color: var(--tinta-2); font-size: 15px; }
+
+/* Professor */
+.prof {
+  display: grid; grid-template-columns: 96px 1fr; gap: 16px; align-items: center; margin-top: 24px;
+}
+.prof img { width: 96px; height: 96px; border-radius: 50%; object-fit: cover; object-position: center 22%; border: 4px solid var(--amarelo); }
+.prof .quem { font-size: 12px; text-transform: uppercase; letter-spacing: .1em; font-weight: 800; color: var(--laranja); }
+.prof .nome { font-family: var(--display); font-size: 20px; color: var(--azul-noite); }
+.prof .bio { color: var(--tinta-2); font-size: 15px; margin-top: 4px; }
+.hero-foto { display: none; }
+@media (min-width: 900px) {
+  .hero-foto {
+    display: block; justify-self: end; width: 300px; aspect-ratio: 3/4; border-radius: 24px; overflow: hidden;
+    border: 6px solid #fff; box-shadow: 14px 14px 0 var(--laranja); transform: rotate(2deg);
+  }
+  .hero-foto img { width: 100%; height: 100%; object-fit: cover; }
+}
+
+/* ---------- Formulário ---------- */
+form { display: grid; gap: 14px; }
+label { font-weight: 700; font-size: 14px; color: var(--azul-noite); display: grid; gap: 6px; }
+input, select {
+  font: inherit; font-size: 16px; color: var(--tinta);
+  border: 1.5px solid var(--linha); border-radius: 12px; padding: 12px 14px; background: #fff; width: 100%;
+}
+input:focus, select:focus { outline: none; border-color: var(--azul); box-shadow: 0 0 0 4px rgba(49, 87, 176, .15); }
+input.invalido { border-color: var(--erro); }
+.dica { font-weight: 500; font-size: 13px; color: var(--tinta-2); }
+.check { display: grid; grid-template-columns: 22px 1fr; gap: 10px; font-weight: 500; font-size: 13px; color: var(--tinta-2); align-items: start; }
+.check input { width: 20px; height: 20px; margin: 1px 0 0; accent-color: var(--azul); }
+.btn {
+  font: inherit; font-family: var(--display); font-weight: 800; font-size: 17px;
+  border: 0; border-radius: 14px; padding: 16px 20px; cursor: pointer;
+  background: var(--laranja); color: #fff; width: 100%;
+  box-shadow: 0 6px 0 #B5340F; transition: transform .08s, box-shadow .08s;
+  text-decoration: none; display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+}
+.btn:active { transform: translateY(4px); box-shadow: 0 2px 0 #B5340F; }
+.btn:disabled { opacity: .6; cursor: wait; }
+.btn.azul { background: var(--azul); box-shadow: 0 6px 0 var(--azul-noite); }
+.btn.claro { background: #fff; color: var(--azul-noite); border: 1.5px solid var(--linha); box-shadow: none; font-size: 15px; }
+.btn.pequeno { width: auto; padding: 10px 14px; font-size: 14px; }
+.msg { border-radius: 12px; padding: 12px 14px; font-size: 14px; font-weight: 600; }
+.msg.erro { background: var(--erro-fundo); color: var(--erro); }
+.msg.ok { background: var(--ok-fundo); color: var(--ok); }
+.oculto { display: none !important; }
+@media (min-width: 900px) { .so-celular { display: none !important; } }
+#cardForm { scroll-margin-top: 16px; }
+
+/* Sucesso */
+.sucesso { text-align: center; }
+.sucesso .icone {
+  width: 72px; height: 72px; margin: 4px auto 12px; border-radius: 50%;
+  background: var(--ok-fundo); color: var(--ok); display: grid; place-items: center; font-size: 36px;
+}
+.sucesso h2 { font-size: 24px; }
+.sucesso p { color: var(--tinta-2); }
+.sucesso .acoes { display: grid; gap: 12px; margin-top: 18px; }
+
+/* ---------- Rodapé ---------- */
+footer {
+  text-align: center; color: var(--tinta-2); font-size: 13px; padding: 24px 20px 40px;
+}
+footer b { color: var(--azul); }
+
+/* ---------- Faixa equipe (modo barraca) ---------- */
+.faixa-equipe {
+  background: var(--amarelo); color: var(--azul-noite); font-weight: 800; font-size: 14px;
+  text-align: center; padding: 8px 12px;
+}

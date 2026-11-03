@@ -1,0 +1,321 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Equipe · Conecta Fatec</title>
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#012457">
+  <link rel="icon" href="/kv/fatec-logo.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Montserrat:wght@500;600;700;800&family=Unbounded:wght@700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/app.css">
+  <style>
+    .barra { background: var(--azul-noite); color: #fff; }
+    .barra .topo img.fatec { filter: brightness(0) invert(1); }
+    .barra .usuario { font-size: 13px; display: flex; gap: 10px; align-items: center; }
+    .barra button { font: inherit; font-size: 13px; background: transparent; color: #fff; border: 1px solid rgba(255,255,255,.35); border-radius: 8px; padding: 6px 10px; cursor: pointer; }
+    .login { max-width: 420px; margin: 48px auto; }
+    .controles { display: flex; flex-wrap: wrap; gap: 10px; align-items: end; margin-bottom: 18px; }
+    .controles label { flex: 1 1 220px; }
+    .kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; margin-bottom: 18px; }
+    .kpi { background: #fff; border: 1px solid var(--linha); border-radius: 14px; padding: 14px 16px; }
+    .kpi b { display: block; font-family: var(--display); font-size: 28px; color: var(--azul-noite); font-variant-numeric: tabular-nums; }
+    .kpi span { font-size: 12px; text-transform: uppercase; letter-spacing: .08em; font-weight: 800; color: var(--tinta-2); }
+    .rankings { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); margin-bottom: 18px; }
+    .rank h3 { margin: 0 0 10px; font-size: 14px; color: var(--azul-noite); }
+    .rank .linha { display: grid; grid-template-columns: 1fr auto; gap: 8px; font-size: 14px; margin-bottom: 6px; }
+    .rank .bar { grid-column: 1 / -1; height: 6px; border-radius: 3px; background: var(--azul); }
+    .tabela-wrap { overflow-x: auto; background: #fff; border: 1px solid var(--linha); border-radius: 14px; }
+    table { border-collapse: collapse; width: 100%; font-size: 14px; }
+    th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--linha); white-space: nowrap; }
+    th { font-size: 12px; text-transform: uppercase; letter-spacing: .06em; color: var(--tinta-2); background: var(--fundo); position: sticky; top: 0; }
+    tr.ganhou td { background: #FFF8D6; }
+    td a { text-decoration: none; font-weight: 600; }
+    .tag { font-size: 11px; font-weight: 800; padding: 2px 8px; border-radius: 999px; background: var(--fundo); color: var(--azul); }
+    .tag.ouro { background: var(--amarelo); color: var(--azul-noite); }
+    .acoes-topo { display: flex; flex-wrap: wrap; gap: 8px; }
+    .vazio { text-align: center; color: var(--tinta-2); padding: 40px 16px; }
+    /* Sorteio */
+    .palco { position: fixed; inset: 0; background: rgba(1, 36, 87, .92); display: grid; place-items: center; z-index: 50; padding: 16px; }
+    .palco .card { max-width: 520px; width: 100%; text-align: center; }
+    .palco .nome-sorteado { font-family: var(--display); font-size: clamp(26px, 6vw, 40px); color: var(--azul-noite); margin: 10px 0 4px; min-height: 1.3em; }
+    .palco .detalhe { color: var(--tinta-2); }
+    .palco .acoes { display: grid; gap: 10px; margin-top: 20px; }
+    /* QR */
+    .qr-box { display: grid; gap: 16px; grid-template-columns: 1fr; }
+    @media (min-width: 760px) { .qr-box { grid-template-columns: 1fr 260px; } }
+    #qr { background: #fff; padding: 12px; border-radius: 12px; border: 1px solid var(--linha); width: fit-content; margin: 0 auto; }
+    .qr-url { font-size: 12px; word-break: break-all; color: var(--tinta-2); text-align: center; margin-top: 8px; }
+  </style>
+</head>
+<body>
+  <div class="barra">
+    <div class="topo">
+      <span style="display:flex;align-items:center;gap:12px"><img class="fatec" src="/kv/fatec-logo.svg" alt="Fatec Ivaiporã"><b style="font-family:var(--display);font-size:15px">Conecta Fatec</b></span>
+      <div class="usuario oculto" id="usuario"><span id="email"></span><button id="sair">Sair</button></div>
+    </div>
+  </div>
+
+  <!-- Login -->
+  <div class="login card" id="telaLogin">
+    <h2>Área da equipe</h2>
+    <form id="formLogin">
+      <label>E-mail <input name="email" type="email" autocomplete="username" required></label>
+      <label>Senha <input name="senha" type="password" autocomplete="current-password" required></label>
+      <div id="msgLogin" class="oculto"></div>
+      <button class="btn azul" type="submit">Entrar</button>
+    </form>
+  </div>
+
+  <!-- Painel -->
+  <main class="wrap oculto" id="telaPainel">
+    <div class="controles">
+      <label>Ação
+        <select id="origem"><option value="">Escolha para carregar…</option></select>
+      </label>
+      <label>Buscar <input id="busca" placeholder="Nome, WhatsApp, cidade ou escola" disabled></label>
+      <div class="acoes-topo">
+        <button class="btn claro pequeno" id="recarregar" disabled>Recarregar</button>
+        <button class="btn claro pequeno" id="exportar" disabled>Baixar planilha</button>
+        <button class="btn pequeno oculto" id="sortear">Sortear</button>
+      </div>
+    </div>
+    <div id="msgPainel" class="oculto"></div>
+
+    <div id="conteudo" class="vazio">Escolha uma ação acima. Nada é carregado antes disso.</div>
+
+    <section class="card" style="margin-top:28px">
+      <h2>QR Code das barracas do ENEM</h2>
+      <div class="qr-box">
+        <div>
+          <form id="formQr">
+            <label>Escola / local da barraca
+              <input id="qrLocal" placeholder="Ex.: Colégio Estadual Barbosa Ferraz">
+              <span class="dica">Vai junto no cadastro, para saber de qual barraca veio cada pessoa.</span>
+            </label>
+            <label>Dia
+              <select id="qrDia"><option value="">Automático pela data</option></select>
+            </label>
+            <div class="acoes-topo">
+              <button class="btn azul pequeno" type="submit">Gerar QR</button>
+              <button class="btn claro pequeno" type="button" id="imprimirQr">Imprimir</button>
+              <a class="btn claro pequeno" id="modoBarraca" href="/enem/?barraca=1">Abrir modo barraca</a>
+            </div>
+          </form>
+        </div>
+        <div><div id="qr"></div><div class="qr-url" id="qrUrl"></div></div>
+      </div>
+    </section>
+  </main>
+
+  <div class="palco oculto" id="palco">
+    <div class="card">
+      <span class="selo" style="margin:0 auto">Sorteio · <span id="palcoDia"></span></span>
+      <div class="nome-sorteado" id="palcoNome">…</div>
+      <div class="detalhe" id="palcoDetalhe"></div>
+      <div class="acoes">
+        <button class="btn" id="confirmar" disabled>Registrar ganhador</button>
+        <button class="btn claro" id="deNovo">Sortear de novo (não registra)</button>
+        <button class="btn claro" id="fechar">Fechar</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <script type="module">
+    import { ORIGENS, AULAO, ENEM } from "/js/config.js";
+    import { db, auth, formatarWhatsapp, mostrarMsg } from "/js/base.js";
+    import { signInWithEmailAndPassword, signOut, onAuthStateChanged }
+      from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import { collection, query, where, getDocs, doc, updateDoc, serverTimestamp }
+      from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+
+    const $ = id => document.getElementById(id);
+    const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+    let leads = [], origemAtual = "", usuario = null;
+
+    // ---------- Login ----------
+    $("formLogin").addEventListener("submit", async e => {
+      e.preventDefault();
+      const f = new FormData(e.target);
+      try { await signInWithEmailAndPassword(auth, f.get("email").trim(), f.get("senha")); }
+      catch { mostrarMsg($("msgLogin"), "E-mail ou senha incorretos."); }
+    });
+    $("sair").onclick = () => signOut(auth);
+    onAuthStateChanged(auth, u => {
+      usuario = u;
+      $("telaLogin").classList.toggle("oculto", !!u);
+      $("telaPainel").classList.toggle("oculto", !u);
+      $("usuario").classList.toggle("oculto", !u);
+      $("email").textContent = u?.email || "";
+    });
+
+    // ---------- Escolha da ação (só carrega depois de escolher) ----------
+    $("origem").innerHTML += ORIGENS.map(o => `<option value="${o.origem}">${o.rotulo}</option>`).join("");
+    $("qrDia").innerHTML += ENEM.dias.map(d => `<option value="${d.data.slice(-2)}">${d.rotulo}</option>`).join("");
+    $("origem").onchange = () => carregar($("origem").value);
+    $("recarregar").onclick = () => carregar(origemAtual);
+    $("busca").oninput = desenhar;
+
+    async function carregar(origem) {
+      origemAtual = origem; leads = [];
+      $("msgPainel").className = "oculto";
+      const ativo = !!origem;
+      ["busca", "recarregar", "exportar"].forEach(id => $(id).disabled = !ativo);
+      $("sortear").classList.toggle("oculto", !origem.startsWith("enem"));
+      if (!ativo) { $("conteudo").className = "vazio"; $("conteudo").textContent = "Escolha uma ação acima."; return; }
+      $("conteudo").className = "vazio"; $("conteudo").textContent = "Carregando…";
+      try {
+        const snap = await getDocs(query(collection(db, "leads"), where("origem", "==", origem)));
+        leads = snap.docs.map(d => ({ id: d.id, ...d.data() }))
+          .sort((a, b) => (b.criadoEm?.seconds || 0) - (a.criadoEm?.seconds || 0));
+        desenhar();
+      } catch (err) {
+        console.error(err);
+        $("conteudo").textContent = "";
+        mostrarMsg($("msgPainel"), err.code === "permission-denied"
+          ? "Seu e-mail ainda não está liberado na equipe. Peça para incluir na coleção \"equipe\" do Firebase."
+          : "Erro ao carregar. Tente de novo.");
+      }
+    }
+
+    function filtrados() {
+      const t = $("busca").value.trim().toLowerCase();
+      if (!t) return leads;
+      const td = t.replace(/\D/g, "");
+      return leads.filter(l =>
+        [l.nome, l.cidade, l.escola, l.curso, l.local].some(v => (v || "").toLowerCase().includes(t))
+        || (td && l.whatsapp.includes(td)));
+    }
+
+    function contar(campo) {
+      const m = new Map();
+      leads.forEach(l => { const k = (l[campo] || "").trim(); if (k) m.set(k, (m.get(k) || 0) + 1); });
+      return [...m].sort((a, b) => b[1] - a[1]);
+    }
+    function ranking(titulo, pares) {
+      const top = pares.slice(0, 6), max = top[0]?.[1] || 1;
+      return `<div class="card rank"><h3>${titulo}</h3>${top.map(([k, v]) =>
+        `<div class="linha"><span>${esc(k)}</span><b>${v}</b><div class="bar" style="width:${(v / max) * 100}%"></div></div>`).join("")
+        || '<span class="dica">Sem dados ainda.</span>'}</div>`;
+    }
+    const hora = l => l.criadoEm ? new Date(l.criadoEm.seconds * 1000).toLocaleString("pt-BR", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" }) : "";
+
+    function desenhar() {
+      const aulao = origemAtual === AULAO.origem;
+      const lista = filtrados();
+      const extra = aulao
+        ? { n: leads.filter(l => l.presente).length, r: "Presentes" }
+        : { n: leads.filter(l => l.cadastradoPor).length, r: "Cadastrados pela equipe" };
+      const kpis = `<div class="kpis">
+        <div class="kpi"><b>${leads.length}</b><span>${aulao ? "Inscritos" : "Participantes"}</span></div>
+        <div class="kpi"><b>${contar("cidade").length}</b><span>Cidades</span></div>
+        <div class="kpi"><b>${contar("escola").length}</b><span>Escolas</span></div>
+        <div class="kpi"><b>${extra.n}</b><span>${extra.r}</span></div>
+        ${aulao ? "" : `<div class="kpi"><b>${leads.filter(l => l.sorteado).length}</b><span>Sorteados</span></div>`}
+      </div>`;
+      const ranks = `<div class="rankings">${ranking("Cidades", contar("cidade"))}${ranking("Escolas", contar("escola"))}
+        ${aulao ? "" : ranking("Curso de interesse", contar("curso"))}</div>`;
+      const linhas = lista.map(l => `<tr class="${l.sorteado ? "ganhou" : ""}">
+        ${aulao ? `<td><input type="checkbox" data-presente="${l.id}" ${l.presente ? "checked" : ""} aria-label="Presente"></td>` : ""}
+        <td>${esc(l.nome)} ${l.sorteado ? '<span class="tag ouro">Ganhou</span>' : ""}</td>
+        <td><a href="https://wa.me/55${l.whatsapp}" target="_blank" rel="noopener">${formatarWhatsapp(l.whatsapp)}</a></td>
+        <td>${esc(l.cidade)}</td><td>${esc(l.escola)}</td>
+        ${aulao ? "" : `<td>${esc(l.curso)}</td><td>${esc(l.local)}</td><td>${l.cadastradoPor ? '<span class="tag">equipe</span>' : ""}</td>`}
+        <td>${hora(l)}</td></tr>`).join("");
+      $("conteudo").className = "";
+      $("conteudo").innerHTML = kpis + ranks + `<div class="tabela-wrap"><table><thead><tr>
+        ${aulao ? "<th>Presente</th>" : ""}<th>Nome</th><th>WhatsApp</th><th>Cidade</th><th>Escola</th>
+        ${aulao ? "" : "<th>Curso</th><th>Barraca</th><th>Origem</th>"}<th>Quando</th></tr></thead>
+        <tbody>${linhas || `<tr><td colspan="9" class="vazio">${leads.length ? "Nada encontrado na busca." : "Ninguém cadastrado ainda."}</td></tr>`}</tbody></table></div>`;
+    }
+
+    // Presença do aulão
+    $("conteudo").addEventListener("change", async e => {
+      const id = e.target.dataset?.presente; if (!id) return;
+      const l = leads.find(x => x.id === id), v = e.target.checked;
+      try {
+        await updateDoc(doc(db, "leads", id), { presente: v, presenteEm: serverTimestamp() });
+        l.presente = v; desenhar();
+      } catch (err) { console.error(err); e.target.checked = !v; mostrarMsg($("msgPainel"), "Não deu para salvar a presença."); }
+    });
+
+    // ---------- Planilha (CSV que abre no Excel) ----------
+    $("exportar").onclick = () => {
+      const cab = ["Nome", "WhatsApp", "Cidade", "Escola", "Curso", "Barraca", "Cadastrado por", "Presente", "Sorteado", "Data"];
+      const cel = v => `"${String(v ?? "").replace(/"/g, '""')}"`;
+      const linhas = filtrados().map(l => [l.nome, formatarWhatsapp(l.whatsapp), l.cidade, l.escola, l.curso, l.local,
+        l.cadastradoPor, l.presente ? "Sim" : "", l.sorteado ? "Sim" : "",
+        l.criadoEm ? new Date(l.criadoEm.seconds * 1000).toLocaleString("pt-BR") : ""].map(cel).join(";"));
+      const blob = new Blob(["﻿" + [cab.join(";"), ...linhas].join("\r\n")], { type: "text/csv;charset=utf-8" });
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(blob); a.download = `leads_${origemAtual}.csv`; a.click();
+      URL.revokeObjectURL(a.href);
+    };
+
+    // ---------- Sorteio ----------
+    let candidato = null;
+    function sortearUm() {
+      const pool = leads.filter(l => !l.sorteado);
+      if (!pool.length) { $("palcoNome").textContent = "Ninguém disponível"; $("palcoDetalhe").textContent = ""; $("confirmar").disabled = true; return; }
+      $("confirmar").disabled = true;
+      let giros = 0;
+      const t = setInterval(() => {
+        $("palcoNome").textContent = pool[Math.floor(Math.random() * pool.length)].nome;
+        if (++giros > 18) {
+          clearInterval(t);
+          const r = new Uint32Array(1); crypto.getRandomValues(r);
+          candidato = pool[r[0] % pool.length];
+          $("palcoNome").textContent = candidato.nome;
+          $("palcoDetalhe").textContent = `${candidato.cidade} · ${candidato.escola} · ${formatarWhatsapp(candidato.whatsapp)}`;
+          $("confirmar").disabled = false;
+        }
+      }, 70);
+    }
+    $("sortear").onclick = () => {
+      $("palcoDia").textContent = ORIGENS.find(o => o.origem === origemAtual)?.rotulo || "";
+      $("palco").classList.remove("oculto"); sortearUm();
+    };
+    $("deNovo").onclick = sortearUm;
+    $("fechar").onclick = () => $("palco").classList.add("oculto");
+    $("confirmar").onclick = async () => {
+      if (!candidato) return;
+      $("confirmar").disabled = true;
+      try {
+        await updateDoc(doc(db, "leads", candidato.id), { sorteado: true, sorteadoEm: serverTimestamp(), sorteadoPor: usuario.email });
+        candidato.sorteado = true; $("palco").classList.add("oculto"); desenhar();
+      } catch (err) { console.error(err); $("palcoDetalhe").textContent = "Não deu para registrar. Tente de novo."; $("confirmar").disabled = false; }
+    };
+
+    // ---------- QR Code ----------
+    function urlQr() {
+      const u = new URL("/enem/", location.origin);
+      const local = $("qrLocal").value.trim(); if (local) u.searchParams.set("local", local);
+      if ($("qrDia").value) u.searchParams.set("dia", $("qrDia").value);
+      return u.toString();
+    }
+    $("formQr").addEventListener("submit", e => {
+      e.preventDefault();
+      const url = urlQr();
+      $("qr").innerHTML = "";
+      new QRCode($("qr"), { text: url, width: 220, height: 220, colorDark: "#012457", correctLevel: QRCode.CorrectLevel.M });
+      $("qrUrl").textContent = url;
+      const b = new URL(url); b.searchParams.set("barraca", "1"); $("modoBarraca").href = b.pathname + b.search;
+    });
+    $("imprimirQr").onclick = () => {
+      const img = $("qr").querySelector("img, canvas"); if (!img) return;
+      const src = img.tagName === "CANVAS" ? img.toDataURL() : img.src;
+      const w = window.open("", "_blank");
+      w.document.write(`<!doctype html><meta charset="utf-8"><title>QR ENEM</title>
+        <body style="font-family:Montserrat,sans-serif;text-align:center;padding:40px;color:#012457">
+        <h1 style="font-size:40px;margin:0">Fez o ENEM?</h1><p style="font-size:24px;margin:8px 0 24px">Aponte a câmera e concorra a ${esc(ENEM.premio)}!</p>
+        <img src="${src}" style="width:360px;height:360px;image-rendering:pixelated">
+        <p style="font-size:18px">${esc($("qrLocal").value)}</p><p style="color:#F04E23;font-weight:800">Conecta Fatec · Fatec Ivaiporã · #vempramelhor</p>
+        <script>onload=()=>print()<\/script></body>`);
+      w.document.close();
+    };
+  </script>
+</body>
+</html>
