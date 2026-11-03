@@ -346,12 +346,12 @@
     });
     $("formQr").requestSubmit(); // já mostra o QR do primeiro colégio
 
-    // Folha A4 por colégio: "Fez o ENEM?" + QR grande + nome do colégio
+    // Folha A4 por colégio: "Vai fazer o ENEM?" + QR grande + nome do colégio
     function imprimir(locais) {
       const paginas = locais.map(local => `
         <section class="pag">
           <div class="topo"><img class="logo" src="${SITE_URL}/kv/fatec-logo.svg" alt="Fatec Ivaiporã"></div>
-          <h1>Fez o ENEM?</h1>
+          <h1>Vai fazer o ENEM?</h1>
           <p class="sub">Aponte a câmera do celular e concorra a<br><b>${esc(ENEM.premio)}</b>!</p>
           <img class="qr" src="${qrDataUrl(urlQr(local))}" alt="">
           <p class="passo">1. Abra a câmera &nbsp; 2. Aponte para o código &nbsp; 3. Preencha seus dados</p>
