@@ -4,16 +4,67 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Redação Descomplicada ENEM 2026 · Conecta Fatec</title>
-  <meta name="description" content="Aulão gratuito e ao vivo de redação com o prof. Carlos Durlo, na véspera do ENEM. Sábado, 07/11, das 14h às 17h, on-line.">
-  <meta property="og:title" content="Redação Descomplicada ENEM 2026 · aulão gratuito">
-  <meta property="og:description" content="Sábado, 07/11, das 14h às 17h, on-line, com o prof. Carlos Durlo. Garanta sua vaga.">
-  <meta property="og:image" content="/kv/carlos-durlo.jpg">
-  <meta name="theme-color" content="#3157B0">
+  <meta name="description" content="Domingo é o Enem. Sábado tem aulão com a Fatec! Redação descomplicada, gratuito e ao vivo com o Prof. Dr. Carlos Durlo. 07/11, das 14h às 17h, on-line.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://conecta.fatecivaipora.com.br/aulao/">
+  <meta property="og:title" content="Redação Descomplicada · ENEM 2026 · aulão gratuito">
+  <meta property="og:description" content="Domingo é o Enem. Sábado tem aulão com a Fatec! 07/11, 14h às 17h, on-line, com o Prof. Dr. Carlos Durlo. Garanta sua vaga.">
+  <meta property="og:image" content="https://conecta.fatecivaipora.com.br/kv/aulao-redacao.jpg">
+  <meta property="og:image:width" content="1280">
+  <meta property="og:image:height" content="1600">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="theme-color" content="#0050B4">
   <link rel="icon" href="/kv/fatec-logo.svg">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Montserrat:wght@500;600;700;800&family=Unbounded:wght@700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/css/app.css">
+  <style>
+    /* Cores da arte "Redação descomplicada" */
+    :root { --r-azul: #0050B4; --r-amarelo: #FDB813; --r-roxo: #6E00B3; --r-laranja: #FF5A00; --r-sky: #00B4FF; --r-gelo: #F1F0EE; }
+    body { background: var(--r-azul); }
+    .hero { background: var(--r-azul); }
+    .hero::after { display: none; }
+    .hero-in { padding-bottom: 28px; }
+    .chamada { font-family: var(--script); font-weight: 700; color: var(--r-amarelo); font-size: clamp(26px, 4.6vw, 40px); line-height: 1.1; margin: 8px 0 18px; }
+    .titulo-redacao { margin: 0; line-height: .9; }
+    .titulo-redacao .caps { display: block; font-family: var(--display); font-weight: 800; font-size: clamp(48px, 10vw, 92px); letter-spacing: -.01em; }
+    .hero h1.titulo-redacao { font-size: inherit; margin: 0; }
+    .hero h1.titulo-redacao .script { display: block; font-family: var(--script); font-weight: 700; color: #fff; font-size: clamp(56px, 11vw, 104px); margin-top: -.08em; }
+    .linha-enem { display: flex; flex-wrap: wrap; align-items: center; gap: 14px 20px; margin-top: 22px; }
+    .bloco-enem { background: var(--r-amarelo); color: var(--azul-noite); font-family: var(--display); font-weight: 800; font-size: clamp(22px, 3.6vw, 32px); padding: 8px 22px; }
+    .com-prof { font-size: clamp(17px, 2.4vw, 22px); font-weight: 600; line-height: 1.3; }
+    .com-prof b { color: var(--r-amarelo); }
+    .foto-arte { display: none; }
+    @media (min-width: 900px) {
+      .foto-arte { display: block; align-self: start; justify-self: end; width: 340px; aspect-ratio: 410/568; overflow: hidden;
+        clip-path: polygon(0 0, 100% 0, 100% 90%, 88% 100%, 0 100%); }
+      .foto-arte img { width: 100%; height: 100%; object-fit: cover; object-position: center 30%; }
+    }
+    .faixa-data { max-width: 1040px; margin: 0 auto; padding: 0 20px; }
+    .faixa-data div { background: var(--r-gelo); color: var(--r-azul); display: flex; flex-wrap: wrap; justify-content: space-between; gap: 8px 24px;
+      padding: 18px 28px; font-weight: 800; font-size: clamp(17px, 2.6vw, 26px); clip-path: polygon(0 0, calc(100% - 36px) 0, 100% 36px, 100% 100%, 0 100%); }
+    @media (max-width: 560px) {
+      .faixa-data div { flex-wrap: nowrap; font-size: 14px; padding: 14px 30px 14px 16px; gap: 10px;
+        clip-path: polygon(0 0, calc(100% - 22px) 0, 100% 22px, 100% 100%, 0 100%); }
+    }
+    main.wrap { padding-top: 28px; }
+    .tiles { display: grid; gap: 16px; grid-template-columns: 1fr; }
+    @media (min-width: 620px) { .tiles { grid-template-columns: 1fr 1fr; } }
+    .tile { padding: 26px 28px 30px; min-height: 190px; }
+    .tile .num { font-family: var(--display); font-weight: 800; font-size: 28px; }
+    .tile h3 { font-family: var(--texto); font-weight: 800; font-size: 22px; margin: 8px 0 8px; }
+    .tile p { margin: 0; font-weight: 600; font-size: 16px; line-height: 1.4; }
+    .t1 { background: var(--r-amarelo); color: var(--azul-noite); }
+    .t2 { background: var(--r-roxo); color: #fff; } .t2 .num { color: var(--r-amarelo); }
+    .t3 { background: var(--r-laranja); color: #fff; } .t3 .num { color: var(--r-amarelo); }
+    .t4 { background: var(--r-sky); color: var(--azul-noite); }
+    .prof { color: #fff; }
+    .prof .nome { color: #fff; } .prof .quem { color: var(--r-amarelo); } .prof .bio { color: #DCE8FA; }
+    .prof img { border-color: var(--r-amarelo); }
+    #cardForm h2 { font-size: 22px; }
+    footer { color: #CFE0F7; } footer b { color: #fff; }
+  </style>
 </head>
 <body>
   <section class="hero">
@@ -22,37 +73,34 @@
     </div>
     <div class="hero-in">
       <div>
-        <span class="selo">Aulão gratuito · ao vivo <span class="pontos"><i></i><i></i><i></i></span></span>
-        <h1>Redação Descomplicada <span class="script">ENEM 2026</span></h1>
-        <p class="lead">Na véspera da prova, um aulão gratuito e ao vivo com o prof. Carlos Durlo para você chegar à redação sabendo o que fazer.</p>
-        <div class="infos">
-          <div class="info"><b>Quando</b>Sábado, 07/11</div>
-          <div class="info"><b>Horário</b>14h às 17h</div>
-          <div class="info"><b>Onde</b>On-line, pelo Zoom</div>
-          <div class="info"><b>Valor</b>Gratuito</div>
+        <p class="chamada">Domingo é o Enem.<br>Sábado tem aulão com a Fatec!</p>
+        <h1 class="titulo-redacao"><span class="caps">REDAÇÃO</span><span class="script">descomplicada</span></h1>
+        <div class="linha-enem">
+          <span class="bloco-enem">ENEM 2026</span>
+          <span class="com-prof"><b>Gratuito</b> | ao vivo com o Prof. Dr.<br>Carlos Durlo</span>
         </div>
-        <a class="btn so-celular" href="#cardForm" style="margin-top:22px">Quero minha vaga</a>
+        <a class="btn so-celular" href="#cardForm" style="margin-top:24px">Quero minha vaga</a>
       </div>
-      <div class="hero-foto"><img src="/kv/carlos-durlo.jpg" alt="Prof. Carlos Durlo"></div>
+      <div class="foto-arte"><img src="/kv/carlos-durlo.jpg" alt="Prof. Dr. Carlos Durlo"></div>
     </div>
+    <div class="faixa-data"><div><span>07/11, sábado</span><span>14h às 17h</span><span>on-line</span></div></div>
   </section>
 
   <main class="wrap">
     <div class="grade">
       <div>
-        <h2 class="secao-titulo">O que você vai ver <span class="script">no aulão</span></h2>
-        <ul class="topicos">
-          <li><span class="n">1</span><div><strong>Leitura e interpretação</strong><span>Técnicas para partir do texto base e desenvolver o tema proposto.</span></div></li>
-          <li><span class="n">2</span><div><strong>Estrutura do texto</strong><span>Como montar o título, quantos parágrafos usar e o que abordar em cada um, com começo, meio e fim.</span></div></li>
-          <li><span class="n">3</span><div><strong>Revisão completa</strong><span>A mesma que o professor faz com os alunos dele: as pegadinhas, os erros e os acertos.</span></div></li>
-          <li><span class="n">4</span><div><strong>Dicas para a hora H</strong><span>O que ajuda a se sair bem na prova e que nem todo mundo conta.</span></div></li>
-        </ul>
+        <div class="tiles">
+          <div class="tile t1"><div class="num">01</div><h3>Interpretação de texto</h3><p>técnicas de leitura para partir do texto base e chegar ao tema proposto</p></div>
+          <div class="tile t2"><div class="num">02</div><h3>Estruturação do texto</h3><p>como montar o título, quantos parágrafos usar e o que abordar em cada um, com começo, meio e fim</p></div>
+          <div class="tile t3"><div class="num">03</div><h3>Revisão completa</h3><p>a mesma que o professor faz com os alunos dele, com as pegadinhas, os erros e os acertos</p></div>
+          <div class="tile t4"><div class="num">04</div><h3>Sem crise na hora H</h3><p>as dicas para se sair bem na prova que nem todo mundo conta</p></div>
+        </div>
 
         <div class="prof">
-          <img src="/kv/carlos-durlo.jpg" alt="Prof. Carlos Durlo">
+          <img src="/kv/carlos-durlo.jpg" alt="Prof. Dr. Carlos Durlo">
           <div>
             <div class="quem">Quem conduz</div>
-            <div class="nome">Prof. Carlos Durlo</div>
+            <div class="nome">Prof. Dr. Carlos Durlo</div>
             <div class="bio" id="bio"></div>
           </div>
         </div>
