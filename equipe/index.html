@@ -82,6 +82,7 @@
         <button class="btn pequeno oculto" id="sortear">Sortear</button>
       </div>
     </div>
+    <div id="aoVivo" class="dica" style="margin:-8px 0 12px;color:var(--ok);font-weight:700"></div>
     <div id="msgPainel" class="oculto"></div>
 
     <div id="conteudo" class="vazio">Escolha uma ação acima. Nada é carregado antes disso.</div>
@@ -129,7 +130,7 @@
     import { db, auth, formatarWhatsapp, mostrarMsg } from "/js/base.js";
     import { GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged }
       from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-    import { collection, query, where, getDocs, doc, updateDoc, serverTimestamp }
+    import { collection, query, where, onSnapshot, doc, updateDoc, serverTimestamp }
       from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
     const $ = id => document.getElementById(id);
@@ -171,26 +172,30 @@
     $("recarregar").onclick = () => carregar(origemAtual);
     $("busca").oninput = desenhar;
 
-    async function carregar(origem) {
+    // Tempo real: depois de escolher a ação, novas inscrições aparecem sozinhas
+    // (o Firestore só lê de novo o que mudou).
+    let pararDeOuvir = null;
+    function carregar(origem) {
+      if (pararDeOuvir) { pararDeOuvir(); pararDeOuvir = null; }
       origemAtual = origem; leads = [];
       $("msgPainel").className = "oculto";
       const ativo = !!origem;
       ["busca", "recarregar", "exportar"].forEach(id => $(id).disabled = !ativo);
       $("sortear").classList.toggle("oculto", !origem.startsWith("enem"));
-      if (!ativo) { $("conteudo").className = "vazio"; $("conteudo").textContent = "Escolha uma ação acima."; return; }
+      if (!ativo) { $("aoVivo").textContent = ""; $("conteudo").className = "vazio"; $("conteudo").textContent = "Escolha uma ação acima."; return; }
       $("conteudo").className = "vazio"; $("conteudo").textContent = "Carregando…";
-      try {
-        const snap = await getDocs(query(collection(db, "leads"), where("origem", "==", origem)));
-        leads = snap.docs.map(d => ({ id: d.id, ...d.data() }))
+      pararDeOuvir = onSnapshot(query(collection(db, "leads"), where("origem", "==", origem)), snap => {
+        leads = snap.docs.map(d => ({ id: d.id, ...d.data({ serverTimestamps: "estimate" }) }))
           .sort((a, b) => (b.criadoEm?.seconds || 0) - (a.criadoEm?.seconds || 0));
+        $("aoVivo").textContent = "● ao vivo · atualizado " + new Date().toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit", second: "2-digit" });
         desenhar();
-      } catch (err) {
+      }, err => {
         console.error(err);
         $("conteudo").textContent = "";
         mostrarMsg($("msgPainel"), err.code === "permission-denied"
           ? "Este e-mail não tem acesso ao painel."
-          : "Erro ao carregar. Tente de novo.");
-      }
+          : "A conexão caiu. Clique em Recarregar.");
+      });
     }
 
     function filtrados() {
