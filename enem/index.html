@@ -47,9 +47,6 @@
         <label>Cidade
           <input name="cidade" autocomplete="address-level2" required maxlength="80" placeholder="Comece a digitar: Ivaiporã, Jardim Alegre…">
         </label>
-        <label>Escola
-          <input name="escola" required maxlength="120" placeholder="Comece a digitar o nome do colégio">
-        </label>
         <fieldset class="cursos-box">
           <legend>Cursos que te interessam <span class="dica">(pode marcar mais de um · opcional)</span></legend>
           <div class="chips" id="cursos"></div>
@@ -109,7 +106,6 @@
     const form = $("form"), msg = $("msg"), btn = $("btn");
     aplicarMascara(form.whatsapp);
     autocompletar(form.cidade, CIDADES);
-    campoEscola(form);
 
     // Modo barraca: alguém da equipe logado + ?barraca=1
     let equipe = null;
@@ -143,7 +139,6 @@
         return mostrarMsg(msg, "Confira o WhatsApp: digite o número do celular, de preferência com DDD.");
       }
       if (!f.cidade || f.cidade.trim().length < 2) return mostrarMsg(msg, "Digite a cidade.");
-      if (!f.escola || f.escola.trim().length < 2) return mostrarMsg(msg, "Digite a escola ou toque em uma das opções abaixo do campo.");
       if (!form.consentimento.checked) return mostrarMsg(msg, "Marque a autorização para continuar.");
       if (!configurado) return mostrarMsg(msg, "Sistema em configuração: falta colar a config do Firebase.");
 

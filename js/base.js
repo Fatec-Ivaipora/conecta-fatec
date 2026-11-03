@@ -196,10 +196,11 @@ export async function salvarLead(origem, dados) {
     nome: limparNome(dados.nome),
     whatsapp,
     cidade: limparNome(dados.cidade),
-    escola: String(dados.escola || "").trim().replace(/\s+/g, " "),
     consentimento: true,
     criadoEm: serverTimestamp(),
   };
+  const escola = String(dados.escola || "").trim().replace(/\s+/g, " ");
+  if (escola) registro.escola = escola; // o ENEM não pede escola
   if (dados.curso) registro.curso = String(dados.curso).trim().slice(0, 400);
   if (dados.local) registro.local = String(dados.local).trim().slice(0, 80);
   if (dados.cadastradoPor) registro.cadastradoPor = dados.cadastradoPor;

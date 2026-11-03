@@ -2,3 +2,7 @@ node_modules/
 .vercel/
 .DS_Store
 Thumbs.db
+
+# Chave de administrador do Firebase: NUNCA subir
+serviceAccountKey.json
+*-firebase-adminsdk-*.json

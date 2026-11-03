@@ -214,7 +214,7 @@
     function contar(campo) {
       const m = new Map();
       // "curso" pode ter vários separados por vírgula: conta cada um
-      leads.forEach(l => String(l[campo] || "").split(campo === "curso" ? "," : " ")
+      leads.forEach(l => (campo === "curso" ? String(l[campo] || "").split(",") : [String(l[campo] || "")])
         .map(k => k.trim()).filter(Boolean).forEach(k => m.set(k, (m.get(k) || 0) + 1)));
       return [...m].sort((a, b) => b[1] - a[1]);
     }
@@ -235,22 +235,22 @@
       const kpis = `<div class="kpis">
         <div class="kpi"><b>${leads.length}</b><span>${aulao ? "Inscritos" : "Participantes"}</span></div>
         <div class="kpi"><b>${contar("cidade").length}</b><span>Cidades</span></div>
-        <div class="kpi"><b>${contar("escola").length}</b><span>Escolas</span></div>
+        ${aulao ? `<div class="kpi"><b>${contar("escola").length}</b><span>Escolas</span></div>` : ""}
         <div class="kpi"><b>${extra.n}</b><span>${extra.r}</span></div>
         ${aulao ? "" : `<div class="kpi"><b>${leads.filter(l => l.sorteado).length}</b><span>Sorteados</span></div>`}
       </div>`;
-      const ranks = `<div class="rankings">${ranking("Cidades", contar("cidade"))}${ranking("Escolas", contar("escola"))}
+      const ranks = `<div class="rankings">${ranking("Cidades", contar("cidade"))}${aulao ? ranking("Escolas", contar("escola")) : ""}
         ${aulao ? "" : ranking("Cursos de interesse", contar("curso"))}</div>`;
       const linhas = lista.map(l => `<tr class="${l.sorteado ? "ganhou" : ""}">
         ${aulao ? `<td><input type="checkbox" data-presente="${l.id}" ${l.presente ? "checked" : ""} aria-label="Presente"></td>` : ""}
         <td>${esc(l.nome)} ${l.sorteado ? '<span class="tag ouro">Ganhou</span>' : ""}</td>
         <td><a href="https://wa.me/55${l.whatsapp}" target="_blank" rel="noopener">${formatarWhatsapp(l.whatsapp)}</a></td>
-        <td>${esc(l.cidade)}</td><td>${esc(l.escola)}</td>
+        <td>${esc(l.cidade)}</td>${aulao ? `<td>${esc(l.escola)}</td>` : ""}
         ${aulao ? "" : `<td>${esc(l.curso)}</td><td>${esc(l.local)}</td><td>${l.cadastradoPor ? '<span class="tag">equipe</span>' : ""}</td>`}
         <td>${hora(l)}</td></tr>`).join("");
       $("conteudo").className = "";
       $("conteudo").innerHTML = kpis + ranks + `<div class="tabela-wrap"><table><thead><tr>
-        ${aulao ? "<th>Presente</th>" : ""}<th>Nome</th><th>WhatsApp</th><th>Cidade</th><th>Escola</th>
+        ${aulao ? "<th>Presente</th>" : ""}<th>Nome</th><th>WhatsApp</th><th>Cidade</th>${aulao ? "<th>Escola</th>" : ""}
         ${aulao ? "" : "<th>Curso</th><th>Barraca</th><th>Origem</th>"}<th>Quando</th></tr></thead>
         <tbody>${linhas || `<tr><td colspan="9" class="vazio">${leads.length ? "Nada encontrado na busca." : "Ninguém cadastrado ainda."}</td></tr>`}</tbody></table></div>`;
     }
