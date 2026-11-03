@@ -89,7 +89,9 @@
     const forcado = qs.get("dia");
     const dia = ENEM.dias.find(d => forcado && d.data.endsWith("-" + forcado.padStart(2, "0")))
       || (hoje <= ENEM.dias[0].data ? ENEM.dias[0] : ENEM.dias[ENEM.dias.length - 1]);
-    const local = (qs.get("local") || "").trim();
+    // ?local=idalia → nome completo do colégio (lista em config.js); texto livre também vale
+    const localParam = (qs.get("local") || "").trim();
+    const local = ENEM.locais.find(l => l.id === localParam)?.nome || localParam;
 
     $("seloDia").textContent = dia.rotulo;
     $("premio").textContent = ENEM.premio;

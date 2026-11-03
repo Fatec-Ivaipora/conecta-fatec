@@ -92,16 +92,20 @@
       <div class="qr-box">
         <div>
           <form id="formQr">
-            <label>Escola / local da barraca
-              <input id="qrLocal" placeholder="Ex.: Colégio Estadual Barbosa Ferraz">
-              <span class="dica">Vai junto no cadastro, para saber de qual barraca veio cada pessoa.</span>
+            <label>Colégio da barraca
+              <select id="qrLocal"></select>
+              <span class="dica">Vai junto no cadastro, para saber de qual barraca veio cada pessoa. O mesmo QR vale para 08/11 e 15/11 (o dia é pela data).</span>
+            </label>
+            <label id="qrOutroWrap" class="oculto">Outro local
+              <input id="qrOutro" maxlength="80" placeholder="Nome do local">
             </label>
             <label>Dia
-              <select id="qrDia"><option value="">Automático pela data</option></select>
+              <select id="qrDia"><option value="">Automático pela data (recomendado)</option></select>
             </label>
             <div class="acoes-topo">
-              <button class="btn azul pequeno" type="submit">Gerar QR</button>
-              <button class="btn claro pequeno" type="button" id="imprimirQr">Imprimir</button>
+              <button class="btn azul pequeno" type="submit">Ver QR</button>
+              <button class="btn claro pequeno" type="button" id="imprimirQr">Imprimir este</button>
+              <button class="btn pequeno" type="button" id="imprimirTodos">Imprimir todos os colégios</button>
               <a class="btn claro pequeno" id="modoBarraca" href="/enem/?barraca=1">Abrir modo barraca</a>
             </div>
           </form>
@@ -126,7 +130,7 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <script type="module">
-    import { ORIGENS, AULAO, ENEM } from "/js/config.js";
+    import { ORIGENS, AULAO, ENEM, SITE_URL } from "/js/config.js";
     import { db, auth, formatarWhatsapp, mostrarMsg } from "/js/base.js";
     import { GoogleAuthProvider, signInWithPopup, signOut, onAuthStateChanged }
       from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
@@ -307,32 +311,73 @@
     };
 
     // ---------- QR Code ----------
-    function urlQr() {
-      const u = new URL("/enem/", location.origin);
-      const local = $("qrLocal").value.trim(); if (local) u.searchParams.set("local", local);
-      if ($("qrDia").value) u.searchParams.set("dia", $("qrDia").value);
+    // Colégios das barracas (config.js → ENEM.locais) + "Outro local"
+    $("qrLocal").innerHTML = ENEM.locais.map(l => `<option value="${l.id}">${esc(l.nome)}</option>`).join("")
+      + `<option value="__outro">Outro local…</option>`;
+    $("qrLocal").onchange = () => {
+      $("qrOutroWrap").classList.toggle("oculto", $("qrLocal").value !== "__outro");
+      $("formQr").requestSubmit();
+    };
+    // O QR leva só o código curto (ex.: ?local=idalia) → QR mais simples de ler
+    const localEscolhido = () => $("qrLocal").value === "__outro" ? $("qrOutro").value.trim() : $("qrLocal").value;
+    const nomeLocal = id => ENEM.locais.find(l => l.id === id)?.nome || id;
+
+    // O QR aponta sempre para o endereço público (SITE_URL), mesmo se o painel for aberto em outro lugar
+    function urlQr(local, dia = $("qrDia").value) {
+      const u = new URL("/enem/", SITE_URL);
+      if (local) u.searchParams.set("local", local);
+      if (dia) u.searchParams.set("dia", dia);
       return u.toString();
+    }
+    function qrDataUrl(texto) {
+      const tmp = document.createElement("div");
+      new QRCode(tmp, { text: texto, width: 600, height: 600, colorDark: "#012457", correctLevel: QRCode.CorrectLevel.M });
+      return tmp.querySelector("canvas").toDataURL("image/png");
     }
     $("formQr").addEventListener("submit", e => {
       e.preventDefault();
-      const url = urlQr();
+      const url = urlQr(localEscolhido());
       $("qr").innerHTML = "";
       new QRCode($("qr"), { text: url, width: 220, height: 220, colorDark: "#012457", correctLevel: QRCode.CorrectLevel.M });
       $("qrUrl").textContent = url;
       const b = new URL(url); b.searchParams.set("barraca", "1"); $("modoBarraca").href = b.pathname + b.search;
     });
-    $("imprimirQr").onclick = () => {
-      const img = $("qr").querySelector("img, canvas"); if (!img) return;
-      const src = img.tagName === "CANVAS" ? img.toDataURL() : img.src;
+    $("formQr").requestSubmit(); // já mostra o QR do primeiro colégio
+
+    // Folha A4 por colégio: "Fez o ENEM?" + QR grande + nome do colégio
+    function imprimir(locais) {
+      const paginas = locais.map(local => `
+        <section class="pag">
+          <div class="topo"><img class="logo" src="${SITE_URL}/kv/fatec-logo.svg" alt="Fatec Ivaiporã"></div>
+          <h1>Fez o ENEM?</h1>
+          <p class="sub">Aponte a câmera do celular e concorra a<br><b>${esc(ENEM.premio)}</b>!</p>
+          <img class="qr" src="${qrDataUrl(urlQr(local))}" alt="">
+          <p class="passo">1. Abra a câmera &nbsp; 2. Aponte para o código &nbsp; 3. Preencha seus dados</p>
+          <p class="local">${esc(nomeLocal(local))}</p>
+          <p class="rod">Conecta Fatec · Fatec Ivaiporã · #vempramelhor</p>
+        </section>`).join("");
       const w = window.open("", "_blank");
-      w.document.write(`<!doctype html><meta charset="utf-8"><title>QR ENEM</title>
-        <body style="font-family:Montserrat,sans-serif;text-align:center;padding:40px;color:#012457">
-        <h1 style="font-size:40px;margin:0">Fez o ENEM?</h1><p style="font-size:24px;margin:8px 0 24px">Aponte a câmera e concorra a ${esc(ENEM.premio)}!</p>
-        <img src="${src}" style="width:360px;height:360px;image-rendering:pixelated">
-        <p style="font-size:18px">${esc($("qrLocal").value)}</p><p style="color:#F04E23;font-weight:800">Conecta Fatec · Fatec Ivaiporã · #vempramelhor</p>
-        <script>onload=()=>print()<\/script></body>`);
+      w.document.write(`<!doctype html><html lang="pt-BR"><meta charset="utf-8"><title>QR ENEM · barracas</title>
+        <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;800&family=Unbounded:wght@800&display=swap" rel="stylesheet">
+        <style>
+          @page { size: A4; margin: 0; }
+          body { margin: 0; font-family: Montserrat, sans-serif; color: #012457; }
+          .pag { height: 297mm; box-sizing: border-box; padding: 0 16mm 16mm; display: flex; flex-direction: column; align-items: center; text-align: center; page-break-after: always; border-bottom: 6mm solid #F04E23; }
+          .topo { align-self: stretch; margin: 0 -16mm 10mm; background: #3157B0; padding: 7mm 0; }
+          .pag:last-child { page-break-after: auto; }
+          .logo { height: 14mm; display: block; margin: 0 auto; }
+          h1 { font-family: Unbounded, sans-serif; font-size: 34pt; margin: 0; }
+          .sub { font-size: 17pt; margin: 4mm 0 8mm; font-weight: 600; }
+          .qr { width: 125mm; height: 125mm; image-rendering: pixelated; }
+          .passo { font-size: 12pt; font-weight: 600; color: #516684; margin: 6mm 0 0; }
+          .local { font-size: 15pt; font-weight: 800; margin: auto 0 2mm; padding: 3mm 6mm; background: #FCD116; border-radius: 3mm; }
+          .rod { font-size: 11pt; font-weight: 800; color: #F04E23; margin: 2mm 0 0; }
+        </style>
+        <body>${paginas}<script>onload=()=>setTimeout(()=>print(),400)<\/script></body></html>`);
       w.document.close();
-    };
+    }
+    $("imprimirQr").onclick = () => imprimir([localEscolhido()]);
+    $("imprimirTodos").onclick = () => imprimir(ENEM.locais.map(l => l.id));
   </script>
 </body>
 </html>

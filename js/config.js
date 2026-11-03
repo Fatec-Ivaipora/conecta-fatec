@@ -13,6 +13,10 @@ export const firebaseConfig = {
   appId: "1:108889184231:web:0746082eaa5149f4608f42",
 };
 
+// Endereço público do site (vai dentro dos QR Codes impressos).
+// Quando conecta.fatecivaipora.com.br estiver no ar, pode trocar aqui.
+export const SITE_URL = "https://conecta-fatecivp.vercel.app";
+
 // 2) Aulão de Redação
 export const AULAO = {
   origem: "aulao-redacao-2026",
@@ -30,6 +34,17 @@ export const ENEM = {
   dias: [
     { origem: "enem-08-11", data: "2026-11-08", rotulo: "ENEM · 08/11" },
     { origem: "enem-15-11", data: "2026-11-15", rotulo: "ENEM · 15/11" },
+  ],
+  // Barracas: colégios PÚBLICOS de Ivaiporã (lista do Connect, sem os particulares).
+  // Cada um vira um QR no painel.
+  locais: [
+    { id: "diniz",    nome: "Colégio Estadual Antônio Diniz Pereira" },
+    { id: "barbosa",  nome: "Colégio Estadual Barbosa Ferraz" },
+    { id: "bento",    nome: "Colégio Estadual Bento Mossurunga" },
+    { id: "cerro",    nome: "Colégio Estadual Barão do Cerro Azul" },
+    { id: "idalia",   nome: "Colégio Estadual Idália Rocha" },
+    { id: "nilo",     nome: "Colégio Estadual do Campo Nilo Peçanha" },
+    { id: "ceebja",   nome: "CEEBJA de Ivaiporã" },
   ],
   // O que a pessoa concorre (aparece no formulário). Ex.: "uma garrafa térmica da Fatec"
   premio: "um brinde exclusivo da Fatec Ivaiporã",
