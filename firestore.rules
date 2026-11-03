@@ -3,11 +3,11 @@ rules_version = '2';
 service cloud.firestore {
   match /databases/{db}/documents {
 
-    // Equipe = e-mails cadastrados na coleção "equipe" (documento com id = e-mail).
+    // Equipe = quem entrou com Google usando e-mail @fatecivaipora.com.br.
     function isEquipe() {
       return request.auth != null
-        && request.auth.token.email != null
-        && exists(/databases/$(db)/documents/equipe/$(request.auth.token.email));
+        && request.auth.token.email_verified == true
+        && request.auth.token.email.lower().matches('.*@fatecivaipora[.]com[.]br$');
     }
 
     function str(v, min, max) {

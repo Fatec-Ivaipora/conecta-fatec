@@ -18,8 +18,7 @@ Não há validação por código: só o formato (DDD + 9 + 8 dígitos).
 1. **Criar o Firebase**: em console.firebase.google.com, adicione um projeto (ex.: `conecta-fatec`).
    - Build → **Firestore Database**: criar, em modo produção, na região `southamerica-east1`.
    - Firestore → **Regras**: colar o conteúdo de `firestore.rules` e clicar em Publicar.
-   - Build → **Authentication**: ativar o login por E-mail/senha. Em Usuários, criar uma conta para cada pessoa da equipe.
-   - Firestore → **Dados**: criar a coleção `equipe` com um documento por pessoa. O **ID do documento é o e-mail** e pode ter um campo `nome`. Quem não estiver aí não vê os leads.
+   - Build → **Authentication** → Método de login: ativar **Google**. A equipe entra com o e-mail @fatecivaipora.com.br (não precisa criar usuários).
    - Configurações do projeto → Seus apps → Web (`</>`): registrar o app e copiar o `firebaseConfig`.
 2. Colar o `firebaseConfig` em `js/config.js`. No mesmo arquivo, preencher `AULAO.zoomLink`, `AULAO.bioProfessor`, `ENEM.premio` e conferir `ENEM.cursos`.
 3. **Vercel**: subir a pasta (repositório no GitHub → importar na Vercel, sem build, framework "Other").
