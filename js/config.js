@@ -3,13 +3,14 @@
 // ============================================================
 
 // 1) Firebase: console.firebase.google.com → Configurações do projeto → Seus apps → Web
+// (é pública por natureza: só identifica o projeto; quem protege os dados são as regras do Firestore)
 export const firebaseConfig = {
-  apiKey: "COLE_AQUI",
-  authDomain: "COLE_AQUI.firebaseapp.com",
-  projectId: "COLE_AQUI",
-  storageBucket: "COLE_AQUI.appspot.com",
-  messagingSenderId: "COLE_AQUI",
-  appId: "COLE_AQUI",
+  apiKey: "AIzaSyCgSCWpz0XL_GakC1Abh4gBUzNIyNS1I1M",
+  authDomain: "conecta-fatec.firebaseapp.com",
+  projectId: "conecta-fatec",
+  storageBucket: "conecta-fatec.firebasestorage.app",
+  messagingSenderId: "108889184231",
+  appId: "1:108889184231:web:0746082eaa5149f4608f42",
 };
 
 // 2) Aulão de Redação
