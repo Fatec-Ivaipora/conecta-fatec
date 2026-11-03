@@ -6,3 +6,4 @@ Thumbs.db
 # Chave de administrador do Firebase: NUNCA subir
 serviceAccountKey.json
 *-firebase-adminsdk-*.json
+backup/
