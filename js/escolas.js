@@ -15,7 +15,7 @@ export const ESCOLAS = [
   ["Colégio Estadual do Campo de Godoy Moreira", "Godoy Moreira"],
   ["Colégio Estadual do Campo Marechal Floriano Peixoto", "Grandes Rios"],
   ["Colégio Estadual Comendador Geremias Lunardelli", "Grandes Rios"],
-  ["Colégio Estadual Antônio Diniz Pereira", "Ivaiporã"],
+  ["Colégio Estadual Cívico-Militar Antônio Diniz Pereira", "Ivaiporã"],
   ["Colégio Estadual Barbosa Ferraz", "Ivaiporã"],
   ["Colégio Estadual Bento Mossurunga", "Ivaiporã"],
   ["Colégio Estadual Barão do Cerro Azul", "Ivaiporã"],

@@ -35,16 +35,16 @@ export const ENEM = {
     { origem: "enem-08-11", data: "2026-11-08", rotulo: "ENEM · 08/11" },
     { origem: "enem-15-11", data: "2026-11-15", rotulo: "ENEM · 15/11" },
   ],
-  // Barracas: colégios PÚBLICOS de Ivaiporã (lista do Connect, sem os particulares).
-  // Cada um vira um QR no painel.
+  // Barracas = os 7 locais de prova do ENEM 2026 em Ivaiporã (arquivo "LOCAIS E QUANTIDADES ENEM 2026").
+  // Cada um vira um QR no painel. O id curto vai no QR (?local=idalia).
   locais: [
-    { id: "diniz",    nome: "Colégio Estadual Antônio Diniz Pereira" },
-    { id: "barbosa",  nome: "Colégio Estadual Barbosa Ferraz" },
-    { id: "bento",    nome: "Colégio Estadual Bento Mossurunga" },
-    { id: "cerro",    nome: "Colégio Estadual Barão do Cerro Azul" },
-    { id: "idalia",   nome: "Colégio Estadual Idália Rocha" },
-    { id: "nilo",     nome: "Colégio Estadual do Campo Nilo Peçanha" },
-    { id: "ceebja",   nome: "CEEBJA de Ivaiporã" },
+    { id: "idalia",  nome: "Colégio Estadual Idália Rocha" },
+    { id: "barbosa", nome: "Colégio Estadual Barbosa Ferraz" },
+    { id: "bento",   nome: "Colégio Estadual Bento Mossurunga" },
+    { id: "fatec",   nome: "Fatec – Faculdade de Tecnologia do Vale do Ivaí" },
+    { id: "diniz",   nome: "Colégio Estadual Cívico-Militar Antônio Diniz Pereira" },
+    { id: "cerro",   nome: "Colégio Estadual Barão do Cerro Azul" },
+    { id: "ceebja",  nome: "CEEBJA de Ivaiporã" },
   ],
   // O que a pessoa concorre (aparece no formulário). Ex.: "uma garrafa térmica da Fatec"
   premio: "um brinde exclusivo da Fatec Ivaiporã",
