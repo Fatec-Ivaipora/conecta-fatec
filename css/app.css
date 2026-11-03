@@ -232,3 +232,8 @@ footer b { color: var(--azul); }
 .marca-conecta { display: inline-flex; align-items: center; gap: 14px; }
 .marca-conecta b { font-family: var(--script); font-weight: 700; font-size: 40px; line-height: 1; color: var(--amarelo);
   display: inline-block; transform: rotate(-4deg) translateY(2px); }
+
+/* Logo do topo leva para a página inicial */
+.link-inicio { display: inline-flex; text-decoration: none; border-radius: 8px; transition: opacity .15s; }
+.link-inicio:hover { opacity: .85; }
+.link-inicio:focus-visible { outline: 3px solid var(--amarelo); outline-offset: 4px; }
