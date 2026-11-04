@@ -14,8 +14,8 @@ export const firebaseConfig = {
 };
 
 // Endereço público do site (vai dentro dos QR Codes impressos).
-// Quando conecta.fatecivaipora.com.br estiver no ar, pode trocar aqui.
-export const SITE_URL = "https://conecta-fatec-three.vercel.app";
+// Domínio oficial (CNAME no Cloudflare → Vercel, criado em 04/11).
+export const SITE_URL = "https://conecta.fatecivaipora.com.br";
 
 // 2) Aulão de Redação
 export const AULAO = {
