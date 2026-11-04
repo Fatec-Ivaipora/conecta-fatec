@@ -57,7 +57,7 @@ export const ENEM = {
   ],
 };
 
-// Login da equipe nas barracas (/barraca/): só cadastra, não vê dados de ninguém.
+// Login da equipe nas escolas (/escola/): só cadastra, não vê dados de ninguém.
 // A senha NÃO fica aqui: só o hash SHA-256 de "conecta-fatec|<senha>".
 export const BARRACA_LOGIN = {
   usuario: "fatec",
