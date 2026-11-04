@@ -1,0 +1,7 @@
+# Não publicar no site
+scripts/
+backup/
+relatorios/
+serviceAccountKey.json
+LEIA-ME.md
+firestore.rules

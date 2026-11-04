@@ -32,3 +32,16 @@ cd Conecta_Fatec
 python -m http.server 8080
 ```
 Abrir http://localhost:8080/aulao/. Atenção: com a config real, o teste grava no banco de verdade.
+
+## Cruzar leads × matrículas do Órbita (para o Comercial não ligar para quem já é aluno)
+
+```
+node scripts/cruzar-matriculas.cjs                         # todos os leads × Órbita 2026.2 e 2027.1
+node scripts/cruzar-matriculas.cjs --semestres 2027.1      # escolher semestres
+node scripts/cruzar-matriculas.cjs --extra lista-lucas.xlsx # juntar outra lista (nome, whatsapp/telefone, cidade)
+```
+Gera `relatorios/leads-x-matriculas-AAAA-MM-DD-HH-MM.xlsx` com as abas **Para contatar**, **Já é aluno - não contatar**,
+**Conferir** (bateu só pelo nome, ou ex-aluno que cancelou/desistiu) e **Resumo**.
+Compara por WhatsApp padronizado (completa DDD 43/42/44 e o 9) e por nome (sem acento). Só lê os bancos.
+Precisa das chaves `serviceAccountKey.json` do Conecta e do Órbita (nunca sobem para o GitHub).
+`relatorios/`, `backup/` e `scripts/` não são publicados no site (`.vercelignore`).
