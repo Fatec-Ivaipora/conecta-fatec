@@ -15,7 +15,7 @@ export const firebaseConfig = {
 
 // Endereço público do site (vai dentro dos QR Codes impressos).
 // Quando conecta.fatecivaipora.com.br estiver no ar, pode trocar aqui.
-export const SITE_URL = "https://conecta-fatecivp.vercel.app";
+export const SITE_URL = "https://conecta-fatec-three.vercel.app";
 
 // 2) Aulão de Redação
 export const AULAO = {
