@@ -237,3 +237,13 @@ footer b { color: var(--azul); }
 .link-inicio { display: inline-flex; text-decoration: none; border-radius: 8px; transition: opacity .15s; }
 .link-inicio:hover { opacity: .85; }
 .link-inicio:focus-visible { outline: 3px solid var(--amarelo); outline-offset: 4px; }
+
+/* Topo no celular: marca menor e selo sem sobrepor */
+.topo .selo { flex-shrink: 0; white-space: nowrap; }
+.marca-conecta { min-width: 0; }
+@media (max-width: 430px) {
+  .marca-conecta { gap: 10px; }
+  .marca-conecta b { font-size: 30px; }
+  .marca-conecta img.fatec { height: 25px; }
+  .topo .selo { font-size: 11px; padding: 5px 10px; }
+}
