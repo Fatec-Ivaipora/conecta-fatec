@@ -252,3 +252,7 @@ footer b { color: var(--azul); }
 .ou-escola { margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--linha); display: grid; gap: 10px; text-align: center; }
 .ou-escola span { font-size: 13px; color: var(--tinta-2); font-weight: 600; }
 .ou-escola .btn { font-size: 14px; }
+
+/* Login do admin com e-mail e senha */
+.login-senha { margin-top: 16px; display: grid; gap: 12px; }
+.login-senha .ou { text-align: center; font-size: 13px; color: var(--tinta-2); font-weight: 600; }

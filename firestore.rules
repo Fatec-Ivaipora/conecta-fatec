@@ -6,8 +6,10 @@ service cloud.firestore {
     // Admin = só quem entrou com Google usando estes e-mails.
     function isEquipe() {
       return request.auth != null
-        && request.auth.token.email_verified == true
-        && request.auth.token.email.lower() in ['suporte.ava@fatecivaipora.com.br', 'suporteavafatec@gmail.com'];
+        && (request.auth.token.email_verified == true
+            || request.auth.token.firebase.sign_in_provider == 'password')
+        && request.auth.token.email.lower() in ['suporte.ava@fatecivaipora.com.br', 'suporteavafatec@gmail.com',
+                                                'suporte.avafatec@gmail.com'];
     }
 
     function str(v, min, max) {
