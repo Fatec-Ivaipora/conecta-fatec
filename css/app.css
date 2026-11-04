@@ -247,3 +247,8 @@ footer b { color: var(--azul); }
   .marca-conecta img.fatec { height: 25px; }
   .topo .selo { font-size: 11px; padding: 5px 10px; }
 }
+
+/* Login do admin: atalho para a equipe das escolas */
+.ou-escola { margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--linha); display: grid; gap: 10px; text-align: center; }
+.ou-escola span { font-size: 13px; color: var(--tinta-2); font-weight: 600; }
+.ou-escola .btn { font-size: 14px; }
