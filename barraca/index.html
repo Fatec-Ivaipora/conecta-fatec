@@ -1,0 +1,246 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Barraca ENEM · Conecta Fatec</title>
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#012457">
+  <link rel="icon" href="/kv/favicon.svg" type="image/svg+xml">
+  <link rel="apple-touch-icon" href="/kv/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@700&family=Montserrat:wght@500;600;700;800&family=Unbounded:wght@700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="/css/app.css">
+  <style>
+    body { background: var(--fundo); }
+    .barra { background: var(--azul-noite); color: #fff; }
+    .barra .topo { padding: 12px 16px; }
+    .barra .info-sessao { font-size: 12px; text-align: right; line-height: 1.3; }
+    .barra .info-sessao b { display: block; font-size: 13px; }
+    .barra button { font: inherit; font-size: 12px; background: transparent; color: #fff; border: 1px solid rgba(255,255,255,.35); border-radius: 8px; padding: 4px 8px; cursor: pointer; margin-top: 4px; }
+    .wrap.estreito { max-width: 520px; padding-top: 20px; }
+    .card h2 { margin-bottom: 6px; }
+    .sub { color: var(--tinta-2); font-size: 14px; margin: 0 0 16px; }
+    .escolas { display: grid; gap: 8px; }
+    .escolas label { display: block; }
+    .escolas input { position: absolute; opacity: 0; pointer-events: none; }
+    .escolas span { display: block; border: 1.5px solid var(--linha); border-radius: 12px; padding: 12px 14px; font-weight: 700; background: #fff; cursor: pointer; }
+    .escolas input:checked + span { border-color: var(--azul); background: var(--azul); color: #fff; }
+    .contador { display: flex; justify-content: space-between; align-items: center; gap: 10px; background: #fff; border: 1px solid var(--linha);
+      border-radius: 14px; padding: 12px 16px; margin-bottom: 14px; font-size: 14px; color: var(--tinta-2); }
+    .contador b { font-family: var(--display); font-size: 26px; color: var(--azul-noite); }
+    .toast { position: fixed; left: 50%; bottom: 20px; transform: translateX(-50%); z-index: 50; max-width: calc(100% - 32px);
+      background: var(--ok); color: #fff; font-weight: 800; padding: 14px 18px; border-radius: 14px; box-shadow: 0 10px 30px -10px rgba(0,0,0,.4); }
+    .toast.aviso { background: #B5530A; }
+  </style>
+</head>
+<body>
+  <div class="barra">
+    <div class="topo">
+      <a href="/" class="marca-conecta link-inicio" aria-label="Conecta Fatec: página inicial"><b>Conecta</b><img class="fatec" src="/kv/fatec-logo.svg" alt="" style="filter:brightness(0) invert(1)"></a>
+      <div class="info-sessao oculto" id="infoSessao"><b id="infoEscola"></b><span id="infoAtendente"></span><br><button id="trocar" type="button">Trocar</button> <button id="sair" type="button">Sair</button></div>
+    </div>
+  </div>
+
+  <main class="wrap estreito">
+    <!-- 1) Login da equipe -->
+    <section class="card oculto" id="telaLogin">
+      <h2>Barraca do ENEM · equipe</h2>
+      <p class="sub">Entre com o login da equipe para lançar quem está sem celular.</p>
+      <form id="formLogin" novalidate>
+        <label>Usuário <input name="usuario" autocomplete="username" autocapitalize="none" required></label>
+        <label>Senha <input name="senha" type="password" autocomplete="current-password" required></label>
+        <div id="msgLogin" class="oculto"></div>
+        <button class="btn azul" type="submit">Entrar</button>
+      </form>
+    </section>
+
+    <!-- 2) Escola da barraca + nome de quem está atendendo -->
+    <section class="card oculto" id="telaEscola">
+      <h2>Onde é a sua barraca?</h2>
+      <p class="sub">Escolha uma vez só. Fica salvo neste celular.</p>
+      <form id="formEscola" novalidate>
+        <div class="escolas" id="escolas"></div>
+        <label>Seu nome (de quem está atendendo)
+          <input name="atendente" maxlength="60" autocomplete="name" placeholder="Ex.: Maria" required>
+        </label>
+        <div id="msgEscola" class="oculto"></div>
+        <button class="btn azul" type="submit">Começar a cadastrar</button>
+      </form>
+    </section>
+
+    <!-- 3) Lançamento manual -->
+    <section class="oculto" id="telaCadastro">
+      <div class="contador"><span>Cadastrados neste celular<br><small id="diaRotulo"></small></span><b id="qtd">0</b></div>
+      <div class="card">
+        <h2>Lançar aluno</h2>
+        <p class="sub">Pergunte os dados e preencha. Ao terminar, o formulário fica pronto para o próximo.</p>
+        <form id="form" novalidate>
+          <label>Nome completo
+            <input name="nome" autocomplete="off" required maxlength="120" placeholder="Nome do aluno">
+          </label>
+          <label>WhatsApp
+            <input name="whatsapp" type="tel" inputmode="numeric" autocomplete="off" required placeholder="(43) 99999-9999">
+          </label>
+          <label>Cidade
+            <input name="cidade" autocomplete="off" required maxlength="80" placeholder="Comece a digitar: Ivaiporã…">
+          </label>
+          <fieldset class="cursos-box">
+            <legend>Cursos de interesse <span class="dica">(um ou mais · opcional)</span></legend>
+            <div class="chips" id="cursos"></div>
+          </fieldset>
+          <label class="check">
+            <input type="checkbox" name="consentimento" required>
+            <span>A pessoa autorizou a Fatec Ivaiporã a usar os dados para o sorteio e para enviar informações sobre cursos e o vestibular (LGPD).</span>
+          </label>
+          <div id="msg" class="oculto"></div>
+          <button class="btn" type="submit" id="btn">Cadastrar</button>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <div class="toast oculto" id="toast" role="status" aria-live="polite"></div>
+
+  <footer><b>Conecta Fatec</b> · Fatec Ivaiporã · #vempramelhor</footer>
+
+  <script type="module">
+    import { ENEM, BARRACA_LOGIN } from "/js/config.js";
+    import { CIDADES } from "/js/cidades.js";
+    import { autocompletar, aplicarMascara, whatsappValido, normalizarWhatsapp, formatarWhatsapp,
+      salvarLead, mostrarMsg } from "/js/base.js";
+
+    const $ = id => document.getElementById(id);
+    const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+
+    // Guarda a sessão neste celular (localStorage pode falhar em aba anônima → segue só na memória)
+    const memoria = {};
+    const guardar = (k, v) => { try { v == null ? localStorage.removeItem(k) : localStorage.setItem(k, v); } catch { } v == null ? delete memoria[k] : memoria[k] = v; };
+    const ler = k => { try { return localStorage.getItem(k) ?? memoria[k] ?? null; } catch { return memoria[k] ?? null; } };
+
+    // Dia do ENEM pela data (igual à página do QR)
+    const hoje = new Date().toLocaleDateString("sv-SE", { timeZone: "America/Sao_Paulo" });
+    const dia = hoje <= ENEM.dias[0].data ? ENEM.dias[0] : ENEM.dias[ENEM.dias.length - 1];
+
+    async function hash(texto) {
+      const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(texto));
+      return [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, "0")).join("");
+    }
+
+    function mostrar(tela) {
+      ["telaLogin", "telaEscola", "telaCadastro"].forEach(t => $(t).classList.toggle("oculto", t !== tela));
+      const logado = tela !== "telaLogin";
+      $("infoSessao").classList.toggle("oculto", tela !== "telaCadastro");
+      if (tela === "telaCadastro") {
+        const local = ENEM.locais.find(l => l.id === ler("barraca_escola"));
+        $("infoEscola").textContent = local?.nome || "";
+        $("infoAtendente").textContent = "Atendente: " + (ler("barraca_atendente") || "");
+        $("diaRotulo").textContent = dia.rotulo + " · " + (local?.nome || "");
+        $("qtd").textContent = ler("barraca_qtd_" + dia.origem) || "0";
+        setTimeout(() => $("form").nome.focus(), 50);
+      }
+      if (!logado) setTimeout(() => $("formLogin").usuario.focus(), 50);
+    }
+
+    function inicio() {
+      if (ler("barraca_ok") !== "1") return mostrar("telaLogin");
+      if (!ler("barraca_escola") || !ler("barraca_atendente")) return mostrar("telaEscola");
+      mostrar("telaCadastro");
+    }
+
+    // ---------- 1) Login ----------
+    $("formLogin").addEventListener("submit", async e => {
+      e.preventDefault();
+      const f = e.target;
+      const ok = f.usuario.value.trim().toLowerCase() === BARRACA_LOGIN.usuario
+        && await hash("conecta-fatec|" + f.senha.value) === BARRACA_LOGIN.senhaHash;
+      if (!ok) return mostrarMsg($("msgLogin"), "Usuário ou senha incorretos.");
+      f.reset(); $("msgLogin").className = "oculto";
+      guardar("barraca_ok", "1");
+      inicio();
+    });
+
+    // ---------- 2) Escola + atendente ----------
+    $("escolas").innerHTML = ENEM.locais.map(l =>
+      `<label><input type="radio" name="escola" value="${l.id}"><span>${esc(l.nome)}</span></label>`).join("");
+    $("formEscola").addEventListener("submit", e => {
+      e.preventDefault();
+      const f = e.target, escola = f.escola.value, nome = f.atendente.value.trim();
+      if (!escola) return mostrarMsg($("msgEscola"), "Escolha a escola da barraca.");
+      if (nome.length < 2) return mostrarMsg($("msgEscola"), "Digite o seu nome.");
+      $("msgEscola").className = "oculto";
+      guardar("barraca_escola", escola); guardar("barraca_atendente", nome);
+      inicio();
+    });
+    $("trocar").onclick = () => {
+      const f = $("formEscola");
+      const atual = f.querySelector(`input[value="${ler("barraca_escola")}"]`); if (atual) atual.checked = true;
+      f.atendente.value = ler("barraca_atendente") || "";
+      mostrar("telaEscola");
+    };
+    $("sair").onclick = () => { ["barraca_ok", "barraca_escola", "barraca_atendente"].forEach(k => guardar(k, null)); inicio(); };
+
+    // ---------- 3) Lançamento ----------
+    const form = $("form"), msg = $("msg"), btn = $("btn");
+    aplicarMascara(form.whatsapp);
+    autocompletar(form.cidade, CIDADES);
+
+    const NAO_SEI = "Ainda não sei";
+    $("cursos").innerHTML = [...ENEM.cursos, NAO_SEI].map(c =>
+      `<label class="chip${c === NAO_SEI ? " chip-nao-sei" : ""}"><input type="checkbox" value="${c}"><span>${c}</span></label>`).join("");
+    $("cursos").addEventListener("change", e => {
+      const caixas = [...$("cursos").querySelectorAll("input")];
+      if (e.target.value === NAO_SEI && e.target.checked) caixas.forEach(c => { if (c !== e.target) c.checked = false; });
+      else if (e.target.checked) caixas.find(c => c.value === NAO_SEI).checked = false;
+    });
+    const cursosMarcados = () => [...$("cursos").querySelectorAll("input:checked")].map(c => c.value).join(", ");
+
+    let tempoToast;
+    function toast(texto, aviso = false) {
+      const t = $("toast");
+      t.textContent = texto; t.className = "toast" + (aviso ? " aviso" : "");
+      clearTimeout(tempoToast); tempoToast = setTimeout(() => t.classList.add("oculto"), 3500);
+    }
+
+    form.addEventListener("submit", async e => {
+      e.preventDefault();
+      msg.className = "oculto";
+      const nome = form.nome.value.trim(), cidade = form.cidade.value.trim();
+      if (nome.length < 3) return mostrarMsg(msg, "Digite o nome completo.");
+      if (!whatsappValido(form.whatsapp.value)) {
+        form.whatsapp.classList.add("invalido");
+        return mostrarMsg(msg, "Confira o WhatsApp: número do celular, de preferência com DDD.");
+      }
+      form.whatsapp.value = formatarWhatsapp(normalizarWhatsapp(form.whatsapp.value));
+      if (cidade.length < 2) return mostrarMsg(msg, "Digite a cidade.");
+      if (!form.consentimento.checked) return mostrarMsg(msg, "Confirme que a pessoa autorizou o uso dos dados.");
+
+      const local = ENEM.locais.find(l => l.id === ler("barraca_escola"));
+      btn.disabled = true; btn.textContent = "Cadastrando…";
+      try {
+        const r = await salvarLead(dia.origem, {
+          nome, whatsapp: form.whatsapp.value, cidade, curso: cursosMarcados(),
+          local: local?.nome, viaBarraca: true, atendente: ler("barraca_atendente"),
+        });
+        if (r === "repetido") {
+          toast("Esse WhatsApp já estava cadastrado hoje.", true);
+        } else {
+          const n = Number(ler("barraca_qtd_" + dia.origem) || 0) + 1;
+          guardar("barraca_qtd_" + dia.origem, String(n)); $("qtd").textContent = n;
+          toast("✓ " + nome.split(" ")[0] + " cadastrado(a)!");
+        }
+        form.reset();
+        form.nome.focus();
+      } catch (err) {
+        console.error(err);
+        mostrarMsg(msg, "Não deu para cadastrar. Confira a internet e tente de novo.");
+      } finally {
+        btn.disabled = false; btn.textContent = "Cadastrar";
+      }
+    });
+
+    inicio();
+  </script>
+</body>
+</html>

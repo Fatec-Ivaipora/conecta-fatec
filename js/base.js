@@ -204,6 +204,8 @@ export async function salvarLead(origem, dados) {
   if (dados.curso) registro.curso = String(dados.curso).trim().slice(0, 400);
   if (dados.local) registro.local = String(dados.local).trim().slice(0, 80);
   if (dados.cadastradoPor) registro.cadastradoPor = dados.cadastradoPor;
+  if (dados.viaBarraca) registro.viaBarraca = true;            // lançado pela equipe na barraca
+  if (dados.atendente) registro.atendente = limparNome(dados.atendente).slice(0, 60);
 
   // Grava junto um "marcador" sem dados pessoais (inscritos/{id}), que serve
   // só para o "Já me inscrevi" conferir se o número está inscrito.

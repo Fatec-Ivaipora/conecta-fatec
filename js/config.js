@@ -57,6 +57,13 @@ export const ENEM = {
   ],
 };
 
+// Login da equipe nas barracas (/barraca/): só cadastra, não vê dados de ninguém.
+// A senha NÃO fica aqui: só o hash SHA-256 de "conecta-fatec|<senha>".
+export const BARRACA_LOGIN = {
+  usuario: "fatec",
+  senhaHash: "73a7860f2cbc3088c1ae9c6aee95a4dc9ce7b22e5c1b363b645ead9d12fb628e",
+};
+
 // Todas as origens (usado no painel da equipe)
 export const ORIGENS = [
   { origem: AULAO.origem, rotulo: "Aulão de Redação · 07/11" },

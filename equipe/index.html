@@ -107,7 +107,7 @@
               <button class="btn azul pequeno" type="submit">Ver QR</button>
               <button class="btn claro pequeno" type="button" id="imprimirQr">Imprimir este</button>
               <button class="btn pequeno" type="button" id="imprimirTodos">Imprimir todos os colégios</button>
-              <a class="btn claro pequeno" id="modoBarraca" href="/enem/?barraca=1">Abrir modo barraca</a>
+              <a class="btn claro pequeno" id="modoBarraca" href="/barraca/" target="_blank" rel="noopener">Abrir página da barraca (equipe)</a>
             </div>
           </form>
         </div>
@@ -232,7 +232,7 @@
       const lista = filtrados();
       const extra = aulao
         ? { n: leads.filter(l => l.presente).length, r: "Presentes" }
-        : { n: leads.filter(l => l.cadastradoPor).length, r: "Cadastrados pela equipe" };
+        : { n: leads.filter(l => l.cadastradoPor || l.viaBarraca).length, r: "Cadastrados pela equipe" };
       const kpis = `<div class="kpis">
         <div class="kpi"><b>${leads.length}</b><span>${aulao ? "Inscritos" : "Participantes"}</span></div>
         <div class="kpi"><b>${contar("cidade").length}</b><span>Cidades</span></div>
@@ -247,7 +247,7 @@
         <td>${esc(l.nome)} ${l.sorteado ? '<span class="tag ouro">Ganhou</span>' : ""}</td>
         <td><a href="https://wa.me/55${l.whatsapp}" target="_blank" rel="noopener">${formatarWhatsapp(l.whatsapp)}</a></td>
         <td>${esc(l.cidade)}</td>${aulao ? `<td>${esc(l.escola)}</td>` : ""}
-        ${aulao ? "" : `<td>${esc(l.curso)}</td><td>${esc(l.local)}</td><td>${l.cadastradoPor ? '<span class="tag">equipe</span>' : ""}</td>`}
+        ${aulao ? "" : `<td>${esc(l.curso)}</td><td>${esc(l.local)}</td><td>${l.cadastradoPor || l.viaBarraca ? `<span class="tag">equipe${l.atendente ? " · " + esc(l.atendente) : ""}</span>` : ""}</td>`}
         <td>${hora(l)}</td></tr>`).join("");
       $("conteudo").className = "";
       $("conteudo").innerHTML = kpis + ranks + `<div class="tabela-wrap"><table><thead><tr>
@@ -271,7 +271,7 @@
       const cab = ["Nome", "WhatsApp", "Cidade", "Escola", "Curso", "Barraca", "Cadastrado por", "Presente", "Sorteado", "Data"];
       const cel = v => `"${String(v ?? "").replace(/"/g, '""')}"`;
       const linhas = filtrados().map(l => [l.nome, formatarWhatsapp(l.whatsapp), l.cidade, l.escola, l.curso, l.local,
-        l.cadastradoPor, l.presente ? "Sim" : "", l.sorteado ? "Sim" : "",
+        l.atendente || l.cadastradoPor || (l.viaBarraca ? "equipe" : ""), l.presente ? "Sim" : "", l.sorteado ? "Sim" : "",
         l.criadoEm ? new Date(l.criadoEm.seconds * 1000).toLocaleString("pt-BR") : ""].map(cel).join(";"));
       const blob = new Blob(["﻿" + [cab.join(";"), ...linhas].join("\r\n")], { type: "text/csv;charset=utf-8" });
       const a = document.createElement("a");
@@ -343,7 +343,6 @@
       $("qr").innerHTML = "";
       new QRCode($("qr"), { text: url, width: 220, height: 220, colorDark: "#012457", correctLevel: QRCode.CorrectLevel.M });
       $("qrUrl").textContent = url;
-      const b = new URL(url); b.searchParams.set("barraca", "1"); $("modoBarraca").href = b.pathname + b.search;
     });
     $("formQr").requestSubmit(); // já mostra o QR do primeiro colégio
 
