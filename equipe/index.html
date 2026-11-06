@@ -375,7 +375,7 @@
     function imprimir(locais) {
       const paginas = locais.map(local => `
         <section class="pag">
-          <div class="topo"><img class="logo" src="${SITE_URL}/kv/fatec-logo.svg" alt="Fatec Ivaiporã"></div>
+          <div class="topo"><img class="logo" src="${location.origin}/kv/fatec-logo-azul.svg" alt="Fatec Ivaiporã"></div>
           <h1>Vai fazer o ENEM?</h1>
           <p class="sub">Aponte a câmera do celular e concorra a<br><b>${esc(ENEM.premio)}</b>!</p>
           <img class="qr" src="${qrDataUrl(urlQr(local))}" alt="">
@@ -388,9 +388,9 @@
         <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;800&family=Unbounded:wght@800&display=swap" rel="stylesheet">
         <style>
           @page { size: A4; margin: 0; }
-          body { margin: 0; font-family: Montserrat, sans-serif; color: #012457; }
+          body { margin: 0; font-family: Montserrat, sans-serif; color: #012457; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
           .pag { height: 297mm; box-sizing: border-box; padding: 0 16mm 16mm; display: flex; flex-direction: column; align-items: center; text-align: center; page-break-after: always; border-bottom: 6mm solid #F04E23; }
-          .topo { align-self: stretch; margin: 0 -16mm 10mm; background: #3157B0; padding: 7mm 0; }
+          .topo { align-self: stretch; margin: 0 -16mm 10mm; background: #fff; padding: 9mm 0 6mm; border-bottom: 3mm solid #3157B0; }
           .pag:last-child { page-break-after: auto; }
           .logo { height: 14mm; display: block; margin: 0 auto; }
           h1 { font-family: Unbounded, sans-serif; font-size: 34pt; margin: 0; }
