@@ -69,8 +69,8 @@
       Entrar com Google
     </button>
     <form id="formSenha" class="login-senha" novalidate>
-      <span class="ou">ou entre com e-mail e senha</span>
-      <label>E-mail <input name="email" type="email" autocomplete="username" required></label>
+      <span class="ou">ou entre com usuário e senha</span>
+      <label>Usuário ou e-mail <input name="email" type="text" autocomplete="username" autocapitalize="none" required placeholder="fatec"></label>
       <label>Senha <input name="senha" type="password" autocomplete="current-password" required></label>
       <button class="btn azul" type="submit">Entrar</button>
     </form>
@@ -154,6 +154,7 @@
 
     // ---------- Login ----------
     const ADMINS = ["suporte.ava@fatecivaipora.com.br", "suporteavafatec@gmail.com", "suporte.avafatec@gmail.com"]; // quem pode entrar no painel
+    const EQUIPE = "fatec@conecta.fatecivaipora.com.br"; // usuário "fatec" da equipe das escolas
     const ehAdmin = u => !!u && ADMINS.includes((u.email || "").toLowerCase());
     $("entrarGoogle").onclick = async () => {
       const prov = new GoogleAuthProvider();
@@ -173,8 +174,10 @@
     // Login do admin com e-mail e senha (usuário criado no Firebase → Authentication)
     $("formSenha").addEventListener("submit", async e => {
       e.preventDefault();
-      const f = e.target, email = f.email.value.trim().toLowerCase();
-      if (!ADMINS.includes(email)) return mostrarMsg($("msgLogin"), "Este e-mail não tem acesso ao painel.");
+      const f = e.target;
+      let email = f.email.value.trim().toLowerCase();
+      if (email && !email.includes("@")) email += "@conecta.fatecivaipora.com.br"; // "fatec" → conta da equipe
+      if (!ADMINS.includes(email) && email !== EQUIPE) return mostrarMsg($("msgLogin"), "Este usuário não tem acesso.");
       try {
         await signInWithEmailAndPassword(auth, email, f.senha.value);
         f.reset();
@@ -182,11 +185,13 @@
         console.error(err);
         mostrarMsg($("msgLogin"), err.code === "auth/operation-not-allowed"
           ? "Login com e-mail e senha ainda não foi ativado no Firebase."
-          : "E-mail ou senha incorretos.");
+          : "Usuário ou senha incorretos.");
       }
     });
     $("sair").onclick = () => signOut(auth);
     onAuthStateChanged(auth, u => {
+      // Conta da equipe das escolas: vai para a tela da equipe (escolhe a escola lá)
+      if (u && (u.email || "").toLowerCase() === EQUIPE) { location.replace("/escola/"); return; }
       if (!ehAdmin(u)) u = null;
       usuario = u;
       $("telaLogin").classList.toggle("oculto", !!u);
