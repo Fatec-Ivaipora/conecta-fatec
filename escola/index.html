@@ -177,7 +177,7 @@
       salvarLead, mostrarMsg } from "/js/base.js";
     import { signInWithEmailAndPassword, signOut, onAuthStateChanged }
       from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
-    import { collection, query, where, onSnapshot, doc, updateDoc, serverTimestamp }
+    import { collection, query, where, onSnapshot, doc, getDoc, updateDoc, serverTimestamp }
       from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
     const $ = id => document.getElementById(id);
@@ -305,7 +305,19 @@
           nome, whatsapp: form.whatsapp.value, cidade, curso: marcadosEm($("cursos")),
           local: escolaAtual()?.nome, viaBarraca: true, atendente: ler("escola_atendente"),
         });
-        if (r === "repetido") toast("Esse WhatsApp já estava cadastrado hoje.", true);
+        if (r === "repetido") {
+          // Mostra onde/quando esse número já foi cadastrado neste dia do ENEM
+          let onde = "";
+          try {
+            const ja = await getDoc(doc(db, "leads", `${diaHoje.origem}_${normalizarWhatsapp(form.whatsapp.value)}`));
+            if (ja.exists()) {
+              const x = ja.data(), quando = x.criadoEm ? new Date(x.criadoEm.seconds * 1000).toLocaleString("pt-BR", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" }) : "";
+              onde = ` (${x.nome}${x.local ? " · " + x.local : " · pelo QR"}${quando ? " · " + quando : ""}${x.atendente ? " · por " + x.atendente : ""})`;
+            }
+          } catch { }
+          mostrarMsg(msg, "Esse WhatsApp já está cadastrado para " + diaHoje.rotulo + onde + ". Não precisa cadastrar de novo.");
+          toast("Esse WhatsApp já estava cadastrado.", true);
+        }
         else {
           const n = Number(ler("escola_qtd_" + diaHoje.origem) || 0) + 1;
           guardar("escola_qtd_" + diaHoje.origem, String(n)); $("qtd").textContent = n;
