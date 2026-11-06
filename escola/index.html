@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Barraca ENEM · Conecta Fatec</title>
+  <title>Equipe ENEM · Conecta Fatec</title>
   <meta name="robots" content="noindex">
   <meta name="theme-color" content="#012457">
   <link rel="icon" href="/kv/favicon.svg" type="image/svg+xml">
@@ -16,10 +16,10 @@
     body { background: var(--fundo); }
     .barra { background: var(--azul-noite); color: #fff; }
     .barra .topo { padding: 12px 16px; }
-    .barra .info-sessao { font-size: 12px; text-align: right; line-height: 1.3; }
-    .barra .info-sessao b { display: block; font-size: 13px; }
-    .barra button { font: inherit; font-size: 12px; background: transparent; color: #fff; border: 1px solid rgba(255,255,255,.35); border-radius: 8px; padding: 4px 8px; cursor: pointer; margin-top: 4px; }
-    .wrap.estreito { max-width: 520px; padding-top: 20px; }
+    .info-sessao { font-size: 12px; text-align: right; line-height: 1.3; }
+    .info-sessao b { display: block; font-size: 13px; }
+    .info-sessao button { font: inherit; font-size: 12px; background: transparent; color: #fff; border: 1px solid rgba(255,255,255,.35); border-radius: 8px; padding: 4px 8px; cursor: pointer; margin-top: 4px; }
+    .wrap.estreito { max-width: 560px; padding-top: 16px; }
     .card h2 { margin-bottom: 6px; }
     .sub { color: var(--tinta-2); font-size: 14px; margin: 0 0 16px; }
     .escolas { display: grid; gap: 8px; }
@@ -27,9 +27,42 @@
     .escolas input { position: absolute; opacity: 0; pointer-events: none; }
     .escolas span { display: block; border: 1.5px solid var(--linha); border-radius: 12px; padding: 12px 14px; font-weight: 700; background: #fff; cursor: pointer; }
     .escolas input:checked + span { border-color: var(--azul); background: var(--azul); color: #fff; }
+
+    /* Abas */
+    .abas { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-bottom: 14px; background: #fff; border: 1px solid var(--linha); border-radius: 14px; padding: 5px; }
+    .abas button { font: inherit; font-weight: 800; font-size: 13px; border: 0; background: transparent; color: var(--tinta-2); border-radius: 10px; padding: 10px 6px; cursor: pointer; }
+    .abas button[aria-selected="true"] { background: var(--azul); color: #fff; }
+
     .contador { display: flex; justify-content: space-between; align-items: center; gap: 10px; background: #fff; border: 1px solid var(--linha);
       border-radius: 14px; padding: 12px 16px; margin-bottom: 14px; font-size: 14px; color: var(--tinta-2); }
     .contador b { font-family: var(--display); font-size: 26px; color: var(--azul-noite); }
+
+    /* Lista de cadastros */
+    .filtros { display: grid; gap: 10px; margin-bottom: 12px; }
+    .dias { display: flex; gap: 8px; }
+    .dias button { flex: 1; font: inherit; font-weight: 700; font-size: 14px; border: 1.5px solid var(--linha); background: #fff; color: var(--tinta); border-radius: 10px; padding: 9px; cursor: pointer; }
+    .dias button[aria-pressed="true"] { background: var(--azul); border-color: var(--azul); color: #fff; }
+    .ao-vivo { font-size: 12px; font-weight: 700; color: var(--ok); }
+    .lista { display: grid; gap: 10px; }
+    .item { background: #fff; border: 1px solid var(--linha); border-radius: 14px; padding: 12px 14px; }
+    .item .linha1 { display: flex; justify-content: space-between; gap: 10px; align-items: start; }
+    .item .nome { font-weight: 800; color: var(--azul-noite); }
+    .item .meta { font-size: 13px; color: var(--tinta-2); margin-top: 2px; }
+    .item .meta a { font-weight: 700; text-decoration: none; }
+    .item .tag { font-size: 11px; font-weight: 800; padding: 2px 8px; border-radius: 999px; background: var(--fundo); color: var(--azul); white-space: nowrap; }
+    .item .editar { font: inherit; font-size: 13px; font-weight: 700; border: 1.5px solid var(--linha); background: #fff; color: var(--azul); border-radius: 8px; padding: 6px 10px; cursor: pointer; }
+    .item form { margin-top: 12px; padding-top: 12px; border-top: 1px dashed var(--linha); }
+    .item .acoes-edicao { display: flex; gap: 8px; }
+    .item .acoes-edicao .btn { font-size: 14px; padding: 11px; }
+    .vazio { text-align: center; color: var(--tinta-2); padding: 28px 12px; background: #fff; border-radius: 14px; border: 1px dashed var(--linha); }
+
+    /* QR da escola */
+    .qr-tela { text-align: center; }
+    .qr-tela h2 { font-size: 24px; }
+    #qrGrande { display: inline-block; background: #fff; padding: 14px; border-radius: 16px; border: 1px solid var(--linha); margin: 6px 0 10px; }
+    #qrGrande img, #qrGrande canvas { width: min(78vw, 340px) !important; height: auto !important; image-rendering: pixelated; }
+    .qr-url { font-size: 12px; color: var(--tinta-2); word-break: break-all; }
+
     .toast { position: fixed; left: 50%; bottom: 20px; transform: translateX(-50%); z-index: 50; max-width: calc(100% - 32px);
       background: var(--ok); color: #fff; font-weight: 800; padding: 14px 18px; border-radius: 14px; box-shadow: 0 10px 30px -10px rgba(0,0,0,.4); }
     .toast.aviso { background: #B5530A; }
@@ -39,26 +72,28 @@
   <div class="barra">
     <div class="topo">
       <a href="/" class="marca-conecta link-inicio" aria-label="Conecta Fatec: página inicial"><b>Conecta</b><img class="fatec" src="/kv/fatec-logo.svg" alt="" style="filter:brightness(0) invert(1)"></a>
-      <div class="info-sessao oculto" id="infoSessao"><b id="infoEscola"></b><span id="infoAtendente"></span><br><button id="trocar" type="button">Trocar</button> <button id="sair" type="button">Sair</button></div>
+      <div class="info-sessao oculto" id="infoSessao"><b id="infoEscola"></b><span id="infoAtendente"></span><br><button id="trocar" type="button">Trocar escola</button> <button id="sair" type="button">Sair</button></div>
     </div>
   </div>
 
   <main class="wrap estreito">
+    <div class="vazio" id="carregando">Carregando…</div>
+
     <!-- 1) Login da equipe -->
     <section class="card oculto" id="telaLogin">
-      <h2>Barraca do ENEM · equipe</h2>
-      <p class="sub">Entre com o login da equipe para lançar quem está sem celular.</p>
+      <h2>Equipe do ENEM</h2>
+      <p class="sub">Entre com o usuário da equipe.</p>
       <form id="formLogin" novalidate>
-        <label>Usuário <input name="usuario" autocomplete="username" autocapitalize="none" required></label>
+        <label>Usuário <input name="usuario" autocomplete="username" autocapitalize="none" required placeholder="equipe"></label>
         <label>Senha <input name="senha" type="password" autocomplete="current-password" required></label>
         <div id="msgLogin" class="oculto"></div>
-        <button class="btn azul" type="submit">Entrar</button>
+        <button class="btn azul" type="submit" id="btnLogin">Entrar</button>
       </form>
     </section>
 
-    <!-- 2) Escola da barraca + nome de quem está atendendo -->
+    <!-- 2) Escola + nome de quem está atendendo -->
     <section class="card oculto" id="telaEscola">
-      <h2>Onde é a sua barraca?</h2>
+      <h2>De qual escola você é?</h2>
       <p class="sub">Escolha uma vez só. Fica salvo neste celular.</p>
       <form id="formEscola" novalidate>
         <div class="escolas" id="escolas"></div>
@@ -66,100 +101,136 @@
           <input name="atendente" maxlength="60" autocomplete="name" placeholder="Ex.: Maria" required>
         </label>
         <div id="msgEscola" class="oculto"></div>
-        <button class="btn azul" type="submit">Começar a cadastrar</button>
+        <button class="btn azul" type="submit">Continuar</button>
       </form>
     </section>
 
-    <!-- 3) Lançamento manual -->
-    <section class="oculto" id="telaCadastro">
-      <div class="contador"><span>Cadastrados neste celular<br><small id="diaRotulo"></small></span><b id="qtd">0</b></div>
-      <div class="card">
-        <h2>Lançar aluno</h2>
-        <p class="sub">Pergunte os dados e preencha. Ao terminar, o formulário fica pronto para o próximo.</p>
-        <form id="form" novalidate>
-          <label>Nome completo
-            <input name="nome" autocomplete="off" required maxlength="120" placeholder="Nome do aluno">
-          </label>
-          <label>WhatsApp
-            <input name="whatsapp" type="tel" inputmode="numeric" autocomplete="off" required placeholder="(43) 99999-9999">
-          </label>
-          <label>Cidade
-            <input name="cidade" autocomplete="off" required maxlength="80" placeholder="Comece a digitar: Ivaiporã…">
-          </label>
-          <fieldset class="cursos-box">
-            <legend>Cursos de interesse <span class="dica">(um ou mais · opcional)</span></legend>
-            <div class="chips" id="cursos"></div>
-          </fieldset>
-          <label class="check">
-            <input type="checkbox" name="consentimento" required>
-            <span>A pessoa autorizou a Fatec Ivaiporã a usar os dados para o sorteio e para enviar informações sobre cursos e o vestibular (LGPD).</span>
-          </label>
-          <div id="msg" class="oculto"></div>
-          <button class="btn" type="submit" id="btn">Cadastrar</button>
-        </form>
+    <!-- 3) Trabalho na escola -->
+    <section class="oculto" id="telaTrabalho">
+      <div class="abas" role="tablist">
+        <button role="tab" aria-selected="true" data-aba="abaLancar">Lançar aluno</button>
+        <button role="tab" aria-selected="false" data-aba="abaCadastros">Cadastros</button>
+        <button role="tab" aria-selected="false" data-aba="abaQr">QR da escola</button>
+      </div>
+
+      <!-- Lançar -->
+      <div id="abaLancar">
+        <div class="contador"><span>Lançados neste celular<br><small id="diaRotulo"></small></span><b id="qtd">0</b></div>
+        <div class="card">
+          <h2>Lançar aluno</h2>
+          <p class="sub">Para quem está sem celular. Pergunte os dados e preencha.</p>
+          <form id="form" novalidate>
+            <label>Nome completo
+              <input name="nome" autocomplete="off" required maxlength="120" placeholder="Nome do aluno">
+            </label>
+            <label>WhatsApp
+              <input name="whatsapp" type="tel" inputmode="numeric" autocomplete="off" required placeholder="(43) 99999-9999">
+            </label>
+            <label>Cidade
+              <input name="cidade" autocomplete="off" required maxlength="80" placeholder="Comece a digitar: Ivaiporã…">
+            </label>
+            <fieldset class="cursos-box">
+              <legend>Cursos de interesse <span class="dica">(um ou mais · opcional)</span></legend>
+              <div class="chips" id="cursos"></div>
+            </fieldset>
+            <label class="check">
+              <input type="checkbox" name="consentimento" required>
+              <span>A pessoa autorizou a Fatec Ivaiporã a usar os dados para o sorteio e para enviar informações sobre cursos e o vestibular (LGPD).</span>
+            </label>
+            <div id="msg" class="oculto"></div>
+            <button class="btn" type="submit" id="btn">Cadastrar</button>
+          </form>
+        </div>
+      </div>
+
+      <!-- Cadastros da escola -->
+      <div id="abaCadastros" class="oculto">
+        <div class="filtros">
+          <div class="dias" id="dias"></div>
+          <input id="busca" type="search" placeholder="Pesquisar por nome, WhatsApp ou cidade">
+          <div class="ao-vivo" id="aoVivo"></div>
+        </div>
+        <div class="contador"><span>Cadastros desta escola<br><small id="rotuloLista"></small></span><b id="qtdLista">0</b></div>
+        <div class="lista" id="lista"></div>
+      </div>
+
+      <!-- QR para a fila -->
+      <div id="abaQr" class="oculto">
+        <div class="card qr-tela">
+          <h2>Vai fazer o ENEM?</h2>
+          <p class="sub">Mostre esta tela: cada pessoa aponta a câmera e se cadastra no próprio celular.</p>
+          <div id="qrGrande"></div>
+          <div class="qr-url" id="qrUrl"></div>
+        </div>
       </div>
     </section>
   </main>
 
   <div class="toast oculto" id="toast" role="status" aria-live="polite"></div>
-
   <footer><b>Conecta Fatec</b> · Fatec Ivaiporã · #vempramelhor</footer>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <script type="module">
-    import { ENEM, BARRACA_LOGIN } from "/js/config.js";
+    import { ENEM, SITE_URL } from "/js/config.js";
     import { CIDADES } from "/js/cidades.js";
-    import { autocompletar, aplicarMascara, whatsappValido, normalizarWhatsapp, formatarWhatsapp,
+    import { db, auth, autocompletar, aplicarMascara, whatsappValido, normalizarWhatsapp, formatarWhatsapp,
       salvarLead, mostrarMsg } from "/js/base.js";
+    import { signInWithEmailAndPassword, signOut, onAuthStateChanged }
+      from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+    import { collection, query, where, onSnapshot, doc, updateDoc, serverTimestamp }
+      from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
     const $ = id => document.getElementById(id);
     const esc = s => String(s ?? "").replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+    const DOMINIO_LOGIN = "@conecta.fatecivaipora.com.br";
 
-    // Guarda a sessão neste celular (localStorage pode falhar em aba anônima → segue só na memória)
+    // Preferências deste celular (localStorage pode falhar em aba anônima → segue na memória)
     const memoria = {};
     const guardar = (k, v) => { try { v == null ? localStorage.removeItem(k) : localStorage.setItem(k, v); } catch { } v == null ? delete memoria[k] : memoria[k] = v; };
     const ler = k => { try { return localStorage.getItem(k) ?? memoria[k] ?? null; } catch { return memoria[k] ?? null; } };
+    const escolaAtual = () => ENEM.locais.find(l => l.id === ler("escola_id"));
 
-    // Dia do ENEM pela data (igual à página do QR)
+    // Dia do ENEM pela data
     const hoje = new Date().toLocaleDateString("sv-SE", { timeZone: "America/Sao_Paulo" });
-    const dia = hoje <= ENEM.dias[0].data ? ENEM.dias[0] : ENEM.dias[ENEM.dias.length - 1];
+    const diaHoje = hoje <= ENEM.dias[0].data ? ENEM.dias[0] : ENEM.dias[ENEM.dias.length - 1];
+    let diaLista = diaHoje;
 
-    async function hash(texto) {
-      const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(texto));
-      return [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2, "0")).join("");
+    let usuario = null, authPronto = false;
+    function mostrar() {
+      const escola = escolaAtual(), atendente = ler("escola_atendente");
+      const tela = !usuario ? "telaLogin" : (!escola || !atendente) ? "telaEscola" : "telaTrabalho";
+      $("carregando").classList.add("oculto");
+      ["telaLogin", "telaEscola", "telaTrabalho"].forEach(t => $(t).classList.toggle("oculto", t !== tela));
+      $("infoSessao").classList.toggle("oculto", tela !== "telaTrabalho");
+      if (tela === "telaTrabalho") {
+        $("infoEscola").textContent = escola.nome;
+        $("infoAtendente").textContent = "Atendente: " + atendente;
+        $("diaRotulo").textContent = diaHoje.rotulo + " · " + escola.nome;
+        $("qtd").textContent = ler("escola_qtd_" + diaHoje.origem) || "0";
+        desenharQr();
+        if (abaAtual === "abaCadastros") ouvirLista();
+      } else pararLista();
     }
 
-    function mostrar(tela) {
-      ["telaLogin", "telaEscola", "telaCadastro"].forEach(t => $(t).classList.toggle("oculto", t !== tela));
-      const logado = tela !== "telaLogin";
-      $("infoSessao").classList.toggle("oculto", tela !== "telaCadastro");
-      if (tela === "telaCadastro") {
-        const local = ENEM.locais.find(l => l.id === ler("barraca_escola"));
-        $("infoEscola").textContent = local?.nome || "";
-        $("infoAtendente").textContent = "Atendente: " + (ler("barraca_atendente") || "");
-        $("diaRotulo").textContent = dia.rotulo + " · " + (local?.nome || "");
-        $("qtd").textContent = ler("barraca_qtd_" + dia.origem) || "0";
-        setTimeout(() => $("form").nome.focus(), 50);
-      }
-      if (!logado) setTimeout(() => $("formLogin").usuario.focus(), 50);
-    }
-
-    function inicio() {
-      if (ler("barraca_ok") !== "1") return mostrar("telaLogin");
-      if (!ler("barraca_escola") || !ler("barraca_atendente")) return mostrar("telaEscola");
-      mostrar("telaCadastro");
-    }
-
-    // ---------- 1) Login ----------
+    // ---------- 1) Login (conta "equipe" no Firebase) ----------
+    onAuthStateChanged(auth, u => { usuario = u; authPronto = true; mostrar(); });
+    // Se o Firebase demorar para responder (internet fraca), mostra a tela de entrada mesmo assim
+    setTimeout(() => { if (!authPronto) mostrar(); }, 2500);
     $("formLogin").addEventListener("submit", async e => {
       e.preventDefault();
       const f = e.target;
-      const ok = f.usuario.value.trim().toLowerCase() === BARRACA_LOGIN.usuario
-        && await hash("conecta-fatec|" + f.senha.value) === BARRACA_LOGIN.senhaHash;
-      if (!ok) return mostrarMsg($("msgLogin"), "Usuário ou senha incorretos.");
-      f.reset(); $("msgLogin").className = "oculto";
-      guardar("barraca_ok", "1");
-      inicio();
+      let email = f.usuario.value.trim().toLowerCase();
+      if (email && !email.includes("@")) email += DOMINIO_LOGIN;
+      $("btnLogin").disabled = true;
+      try {
+        await signInWithEmailAndPassword(auth, email, f.senha.value);
+        f.reset(); $("msgLogin").className = "oculto";
+      } catch (err) {
+        console.error(err);
+        mostrarMsg($("msgLogin"), "Usuário ou senha incorretos.");
+      } finally { $("btnLogin").disabled = false; }
     });
+    $("sair").onclick = async () => { pararLista(); await signOut(auth); };
 
     // ---------- 2) Escola + atendente ----------
     $("escolas").innerHTML = ENEM.locais.map(l =>
@@ -167,34 +238,46 @@
     $("formEscola").addEventListener("submit", e => {
       e.preventDefault();
       const f = e.target, escola = f.escola.value, nome = f.atendente.value.trim();
-      if (!escola) return mostrarMsg($("msgEscola"), "Escolha a escola da barraca.");
+      if (!escola) return mostrarMsg($("msgEscola"), "Escolha a sua escola.");
       if (nome.length < 2) return mostrarMsg($("msgEscola"), "Digite o seu nome.");
       $("msgEscola").className = "oculto";
-      guardar("barraca_escola", escola); guardar("barraca_atendente", nome);
-      inicio();
+      guardar("escola_id", escola); guardar("escola_atendente", nome);
+      pararLista(); mostrar();
     });
     $("trocar").onclick = () => {
       const f = $("formEscola");
-      const atual = f.querySelector(`input[value="${ler("barraca_escola")}"]`); if (atual) atual.checked = true;
-      f.atendente.value = ler("barraca_atendente") || "";
-      mostrar("telaEscola");
+      const atual = f.querySelector(`input[value="${ler("escola_id")}"]`); if (atual) atual.checked = true;
+      f.atendente.value = ler("escola_atendente") || "";
+      guardar("escola_id", null); mostrar();
     };
-    $("sair").onclick = () => { ["barraca_ok", "barraca_escola", "barraca_atendente"].forEach(k => guardar(k, null)); inicio(); };
 
-    // ---------- 3) Lançamento ----------
+    // ---------- Abas ----------
+    let abaAtual = "abaLancar";
+    document.querySelectorAll(".abas button").forEach(b => b.onclick = () => {
+      abaAtual = b.dataset.aba;
+      document.querySelectorAll(".abas button").forEach(x => x.setAttribute("aria-selected", String(x === b)));
+      ["abaLancar", "abaCadastros", "abaQr"].forEach(a => $(a).classList.toggle("oculto", a !== abaAtual));
+      if (abaAtual === "abaCadastros") ouvirLista(); else pararLista();
+    });
+
+    // ---------- Cursos (botões) ----------
+    const NAO_SEI = "Ainda não sei";
+    const chipsCursos = (marcados = []) => [...ENEM.cursos, NAO_SEI].map(c =>
+      `<label class="chip${c === NAO_SEI ? " chip-nao-sei" : ""}"><input type="checkbox" value="${esc(c)}"${marcados.includes(c) ? " checked" : ""}><span>${esc(c)}</span></label>`).join("");
+    function ligarChips(caixa) {
+      caixa.addEventListener("change", e => {
+        const todas = [...caixa.querySelectorAll("input")];
+        if (e.target.value === NAO_SEI && e.target.checked) todas.forEach(c => { if (c !== e.target) c.checked = false; });
+        else if (e.target.checked) todas.find(c => c.value === NAO_SEI).checked = false;
+      });
+    }
+    const marcadosEm = caixa => [...caixa.querySelectorAll("input:checked")].map(c => c.value).join(", ");
+
+    // ---------- 3a) Lançar aluno ----------
     const form = $("form"), msg = $("msg"), btn = $("btn");
     aplicarMascara(form.whatsapp);
     autocompletar(form.cidade, CIDADES);
-
-    const NAO_SEI = "Ainda não sei";
-    $("cursos").innerHTML = [...ENEM.cursos, NAO_SEI].map(c =>
-      `<label class="chip${c === NAO_SEI ? " chip-nao-sei" : ""}"><input type="checkbox" value="${c}"><span>${c}</span></label>`).join("");
-    $("cursos").addEventListener("change", e => {
-      const caixas = [...$("cursos").querySelectorAll("input")];
-      if (e.target.value === NAO_SEI && e.target.checked) caixas.forEach(c => { if (c !== e.target) c.checked = false; });
-      else if (e.target.checked) caixas.find(c => c.value === NAO_SEI).checked = false;
-    });
-    const cursosMarcados = () => [...$("cursos").querySelectorAll("input:checked")].map(c => c.value).join(", ");
+    $("cursos").innerHTML = chipsCursos(); ligarChips($("cursos"));
 
     let tempoToast;
     function toast(texto, aviso = false) {
@@ -216,31 +299,128 @@
       if (cidade.length < 2) return mostrarMsg(msg, "Digite a cidade.");
       if (!form.consentimento.checked) return mostrarMsg(msg, "Confirme que a pessoa autorizou o uso dos dados.");
 
-      const local = ENEM.locais.find(l => l.id === ler("barraca_escola"));
       btn.disabled = true; btn.textContent = "Cadastrando…";
       try {
-        const r = await salvarLead(dia.origem, {
-          nome, whatsapp: form.whatsapp.value, cidade, curso: cursosMarcados(),
-          local: local?.nome, viaBarraca: true, atendente: ler("barraca_atendente"),
+        const r = await salvarLead(diaHoje.origem, {
+          nome, whatsapp: form.whatsapp.value, cidade, curso: marcadosEm($("cursos")),
+          local: escolaAtual()?.nome, viaBarraca: true, atendente: ler("escola_atendente"),
         });
-        if (r === "repetido") {
-          toast("Esse WhatsApp já estava cadastrado hoje.", true);
-        } else {
-          const n = Number(ler("barraca_qtd_" + dia.origem) || 0) + 1;
-          guardar("barraca_qtd_" + dia.origem, String(n)); $("qtd").textContent = n;
+        if (r === "repetido") toast("Esse WhatsApp já estava cadastrado hoje.", true);
+        else {
+          const n = Number(ler("escola_qtd_" + diaHoje.origem) || 0) + 1;
+          guardar("escola_qtd_" + diaHoje.origem, String(n)); $("qtd").textContent = n;
           toast("✓ " + nome.split(" ")[0] + " cadastrado(a)!");
         }
-        form.reset();
-        form.nome.focus();
+        form.reset(); form.nome.focus();
       } catch (err) {
         console.error(err);
         mostrarMsg(msg, "Não deu para cadastrar. Confira a internet e tente de novo.");
-      } finally {
-        btn.disabled = false; btn.textContent = "Cadastrar";
-      }
+      } finally { btn.disabled = false; btn.textContent = "Cadastrar"; }
     });
 
-    inicio();
+    // ---------- 3b) Cadastros da escola (tempo real, pesquisa e edição) ----------
+    let pararDeOuvir = null, cadastros = [], editando = null;
+    $("dias").innerHTML = ENEM.dias.map(d => `<button type="button" data-origem="${d.origem}">${esc(d.rotulo)}</button>`).join("");
+    const marcarDia = () => $("dias").querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.origem === diaLista.origem)));
+    marcarDia();
+    $("dias").onclick = e => {
+      const b = e.target.closest("button"); if (!b) return;
+      diaLista = ENEM.dias.find(d => d.origem === b.dataset.origem); marcarDia(); ouvirLista();
+    };
+    $("busca").oninput = desenharLista;
+
+    function pararLista() { if (pararDeOuvir) { pararDeOuvir(); pararDeOuvir = null; } }
+    function ouvirLista() {
+      pararLista();
+      const escola = escolaAtual(); if (!escola || !usuario) return;
+      $("rotuloLista").textContent = diaLista.rotulo + " · " + escola.nome;
+      $("lista").innerHTML = '<div class="vazio">Carregando…</div>';
+      pararDeOuvir = onSnapshot(
+        query(collection(db, "leads"), where("origem", "==", diaLista.origem), where("local", "==", escola.nome)),
+        snap => {
+          cadastros = snap.docs.map(d => ({ id: d.id, ...d.data({ serverTimestamps: "estimate" }) }))
+            .sort((a, b) => (b.criadoEm?.seconds || 0) - (a.criadoEm?.seconds || 0));
+          $("aoVivo").textContent = "● ao vivo · atualizado " + new Date().toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit", second: "2-digit" });
+          desenharLista();
+        },
+        err => {
+          console.error(err);
+          $("lista").innerHTML = `<div class="vazio">${err.code === "permission-denied" ? "Este usuário não tem acesso aos cadastros." : "A conexão caiu. Toque na aba de novo."}</div>`;
+        });
+    }
+
+    const hora = l => l.criadoEm ? new Date(l.criadoEm.seconds * 1000).toLocaleString("pt-BR", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" }) : "";
+    function desenharLista() {
+      const t = $("busca").value.trim().toLowerCase(), td = t.replace(/\D/g, "");
+      const lista = !t ? cadastros : cadastros.filter(l =>
+        [l.nome, l.cidade, l.curso].some(v => (v || "").toLowerCase().includes(t)) || (td && l.whatsapp.includes(td)));
+      $("qtdLista").textContent = cadastros.length;
+      if (!lista.length) { $("lista").innerHTML = `<div class="vazio">${cadastros.length ? "Nada encontrado na pesquisa." : "Ainda não há cadastros desta escola neste dia."}</div>`; return; }
+      $("lista").innerHTML = lista.map(l => `
+        <div class="item" data-id="${l.id}">
+          <div class="linha1">
+            <div>
+              <div class="nome">${esc(l.nome)}</div>
+              <div class="meta"><a href="https://wa.me/55${l.whatsapp}" target="_blank" rel="noopener">${formatarWhatsapp(l.whatsapp)}</a> · ${esc(l.cidade)} · ${hora(l)}</div>
+              ${l.curso ? `<div class="meta">${esc(l.curso)}</div>` : ""}
+              ${l.editadoPor ? `<div class="meta">Editado por ${esc(l.editadoPor)}</div>` : ""}
+            </div>
+            <div style="display:grid;gap:6px;justify-items:end">
+              ${l.viaBarraca ? `<span class="tag">equipe${l.atendente ? " · " + esc(l.atendente) : ""}</span>` : `<span class="tag">pelo QR</span>`}
+              <button type="button" class="editar" data-editar="${l.id}">Editar</button>
+            </div>
+          </div>
+          ${editando === l.id ? formEdicao(l) : ""}
+        </div>`).join("");
+      if (editando) prepararEdicao();
+    }
+
+    function formEdicao(l) {
+      const marcados = (l.curso || "").split(",").map(s => s.trim()).filter(Boolean);
+      return `<form id="formEdicao" novalidate>
+        <label>Nome completo <input name="nome" maxlength="120" value="${esc(l.nome)}"></label>
+        <label>Cidade <input name="cidade" maxlength="80" value="${esc(l.cidade)}" autocomplete="off"></label>
+        <fieldset class="cursos-box"><legend>Cursos de interesse</legend><div class="chips" id="cursosEdicao">${chipsCursos(marcados)}</div></fieldset>
+        <p class="dica">O WhatsApp não muda. Se estiver errado, faça um cadastro novo.</p>
+        <div id="msgEdicao" class="oculto"></div>
+        <div class="acoes-edicao"><button class="btn azul" type="submit">Salvar</button><button class="btn claro" type="button" id="cancelarEdicao">Cancelar</button></div>
+      </form>`;
+    }
+    function prepararEdicao() {
+      const f = $("formEdicao"); if (!f) return;
+      autocompletar(f.cidade, CIDADES); ligarChips($("cursosEdicao"));
+      $("cancelarEdicao").onclick = () => { editando = null; desenharLista(); };
+      f.onsubmit = async e => {
+        e.preventDefault();
+        const nome = f.nome.value.trim().replace(/\s+/g, " "), cidade = f.cidade.value.trim();
+        if (nome.length < 3) return mostrarMsg($("msgEdicao"), "Digite o nome completo.");
+        if (cidade.length < 2) return mostrarMsg($("msgEdicao"), "Digite a cidade.");
+        try {
+          await updateDoc(doc(db, "leads", editando), {
+            nome, cidade, curso: marcadosEm($("cursosEdicao")),
+            editadoPor: ler("escola_atendente"), editadoEm: serverTimestamp(),
+          });
+          editando = null; toast("✓ Cadastro atualizado"); desenharLista();
+        } catch (err) {
+          console.error(err);
+          mostrarMsg($("msgEdicao"), "Não deu para salvar. Tente de novo.");
+        }
+      };
+    }
+    $("lista").addEventListener("click", e => {
+      const id = e.target.closest("[data-editar]")?.dataset.editar; if (!id) return;
+      editando = editando === id ? null : id; desenharLista();
+      if (editando) document.querySelector(`[data-id="${id}"]`)?.scrollIntoView({ block: "start", behavior: "smooth" });
+    });
+
+    // ---------- 3c) QR da escola (para a fila) ----------
+    function desenharQr() {
+      const escola = escolaAtual(); if (!escola) return;
+      const url = new URL("/enem/", SITE_URL); url.searchParams.set("local", escola.id);
+      $("qrGrande").innerHTML = "";
+      new QRCode($("qrGrande"), { text: url.toString(), width: 600, height: 600, colorDark: "#012457", correctLevel: QRCode.CorrectLevel.M });
+      $("qrUrl").textContent = url.toString();
+    }
   </script>
 </body>
 </html>

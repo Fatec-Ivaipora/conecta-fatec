@@ -12,6 +12,26 @@ service cloud.firestore {
                                                 'suporte.avafatec@gmail.com'];
     }
 
+    // Equipe das escolas: usuário único "equipe" (conta e-mail/senha criada no console).
+    // Vê, pesquisa, lança e edita nome/cidade/cursos. Não apaga, não sorteia, não muda WhatsApp.
+    function isTime() {
+      return request.auth != null
+        && request.auth.token.firebase.sign_in_provider == 'password'
+        && request.auth.token.email.lower() == 'equipe@conecta.fatecivaipora.com.br';
+    }
+
+    // Edição de cadastro (admin ou equipe): só estes campos, sempre registrando quem editou.
+    function edicaoValida() {
+      let d = request.resource.data;
+      return d.diff(resource.data).affectedKeys()
+               .hasOnly(['nome', 'cidade', 'curso', 'editadoPor', 'editadoEm'])
+        && str(d.nome, 3, 120)
+        && str(d.cidade, 2, 80)
+        && (!('curso' in d) || d.curso == '' || str(d.curso, 1, 400))
+        && str(d.editadoPor, 2, 60)
+        && d.editadoEm == request.time;
+    }
+
     function str(v, min, max) {
       return v is string && v.size() >= min && v.size() <= max;
     }
@@ -49,10 +69,11 @@ service cloud.firestore {
 
     match /leads/{id} {
       allow create: if leadValido(id);          // público: só cria, nunca lê
-      allow read: if isEquipe();
-      allow update: if isEquipe()
-        && request.resource.data.diff(resource.data).affectedKeys()
-             .hasOnly(['presente', 'presenteEm', 'sorteado', 'sorteadoEm', 'sorteadoPor']);
+      allow read: if isEquipe() || isTime();
+      allow update: if (isEquipe()
+          && request.resource.data.diff(resource.data).affectedKeys()
+               .hasOnly(['presente', 'presenteEm', 'sorteado', 'sorteadoEm', 'sorteadoPor']))
+        || ((isEquipe() || isTime()) && edicaoValida());
       allow delete: if false;
     }
   }

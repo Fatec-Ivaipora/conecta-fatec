@@ -29,13 +29,13 @@ export const AULAO = {
   fim: "2026-11-07T17:00:00-03:00",
 };
 
-// 3) Sorteio nas barracas do ENEM — um sorteio por dia
+// 3) Sorteio nas escolas do ENEM — um sorteio por dia
 export const ENEM = {
   dias: [
     { origem: "enem-08-11", data: "2026-11-08", rotulo: "ENEM · 08/11" },
     { origem: "enem-15-11", data: "2026-11-15", rotulo: "ENEM · 15/11" },
   ],
-  // Barracas = os 7 locais de prova do ENEM 2026 em Ivaiporã (arquivo "LOCAIS E QUANTIDADES ENEM 2026").
+  // Escolas = os 7 locais de prova do ENEM 2026 em Ivaiporã (arquivo "LOCAIS E QUANTIDADES ENEM 2026").
   // Cada um vira um QR no painel. O id curto vai no QR (?local=idalia).
   locais: [
     { id: "idalia",  nome: "Colégio Estadual Idália Rocha" },
@@ -57,12 +57,8 @@ export const ENEM = {
   ],
 };
 
-// Login da equipe nas escolas (/escola/): só cadastra, não vê dados de ninguém.
-// A senha NÃO fica aqui: só o hash SHA-256 de "conecta-fatec|<senha>".
-export const BARRACA_LOGIN = {
-  usuario: "fatec",
-  senhaHash: "73a7860f2cbc3088c1ae9c6aee95a4dc9ce7b22e5c1b363b645ead9d12fb628e",
-};
+// Login da equipe (/escola/): conta Firebase e-mail/senha "equipe@conecta.fatecivaipora.com.br",
+// criada no console; a senha fica só no Firebase.
 
 // Todas as origens (usado no painel da equipe)
 export const ORIGENS = [

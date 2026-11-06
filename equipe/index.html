@@ -75,7 +75,7 @@
       <button class="btn azul" type="submit">Entrar</button>
     </form>
     <div class="ou-escola">
-      <span>É da equipe das escolas (barraca do ENEM)?</span>
+      <span>É da equipe das escolas do ENEM?</span>
       <a class="btn claro" href="/escola/">Entrar com usuário e senha → lançar alunos</a>
     </div>
   </div>
@@ -99,13 +99,13 @@
     <div id="conteudo" class="vazio">Escolha uma ação acima. Nada é carregado antes disso.</div>
 
     <section class="card" style="margin-top:28px">
-      <h2>QR Code das barracas do ENEM</h2>
+      <h2>QR Code das escolas do ENEM</h2>
       <div class="qr-box">
         <div>
           <form id="formQr">
-            <label>Colégio da barraca
+            <label>Escola
               <select id="qrLocal"></select>
-              <span class="dica">Vai junto no cadastro, para saber de qual barraca veio cada pessoa. O mesmo QR vale para 08/11 e 15/11 (o dia é pela data).</span>
+              <span class="dica">Vai junto no cadastro, para saber de qual escola veio cada pessoa. O mesmo QR vale para 08/11 e 15/11 (o dia é pela data).</span>
             </label>
             <label id="qrOutroWrap" class="oculto">Outro local
               <input id="qrOutro" maxlength="80" placeholder="Nome do local">
@@ -117,7 +117,7 @@
               <button class="btn azul pequeno" type="submit">Ver QR</button>
               <button class="btn claro pequeno" type="button" id="imprimirQr">Imprimir este</button>
               <button class="btn pequeno" type="button" id="imprimirTodos">Imprimir todos os colégios</button>
-              <a class="btn claro pequeno" id="modoBarraca" href="/escola/" target="_blank" rel="noopener">Abrir página da barraca (equipe)</a>
+              <a class="btn claro pequeno" id="modoBarraca" href="/escola/" target="_blank" rel="noopener">Abrir página da equipe</a>
             </div>
           </form>
         </div>
@@ -277,7 +277,7 @@
       $("conteudo").className = "";
       $("conteudo").innerHTML = kpis + ranks + `<div class="tabela-wrap"><table><thead><tr>
         ${aulao ? "<th>Presente</th>" : ""}<th>Nome</th><th>WhatsApp</th><th>Cidade</th>${aulao ? "<th>Escola</th>" : ""}
-        ${aulao ? "" : "<th>Curso</th><th>Barraca</th><th>Origem</th>"}<th>Quando</th></tr></thead>
+        ${aulao ? "" : "<th>Curso</th><th>Escola</th><th>Origem</th>"}<th>Quando</th></tr></thead>
         <tbody>${linhas || `<tr><td colspan="9" class="vazio">${leads.length ? "Nada encontrado na busca." : "Ninguém cadastrado ainda."}</td></tr>`}</tbody></table></div>`;
     }
 
@@ -293,7 +293,7 @@
 
     // ---------- Planilha (CSV que abre no Excel) ----------
     $("exportar").onclick = () => {
-      const cab = ["Nome", "WhatsApp", "Cidade", "Escola", "Curso", "Barraca", "Cadastrado por", "Presente", "Sorteado", "Data"];
+      const cab = ["Nome", "WhatsApp", "Cidade", "Escola", "Curso", "Local (escola)", "Cadastrado por", "Presente", "Sorteado", "Data"];
       const cel = v => `"${String(v ?? "").replace(/"/g, '""')}"`;
       const linhas = filtrados().map(l => [l.nome, formatarWhatsapp(l.whatsapp), l.cidade, l.escola, l.curso, l.local,
         l.atendente || l.cadastradoPor || (l.viaBarraca ? "equipe" : ""), l.presente ? "Sim" : "", l.sorteado ? "Sim" : "",
@@ -339,7 +339,7 @@
     };
 
     // ---------- QR Code ----------
-    // Colégios das barracas (config.js → ENEM.locais) + "Outro local"
+    // Escolas do ENEM (config.js → ENEM.locais) + "Outro local"
     $("qrLocal").innerHTML = ENEM.locais.map(l => `<option value="${l.id}">${esc(l.nome)}</option>`).join("")
       + `<option value="__outro">Outro local…</option>`;
     $("qrLocal").onchange = () => {
@@ -384,7 +384,7 @@
           <p class="rod">Conecta Fatec · Fatec Ivaiporã · #vempramelhor</p>
         </section>`).join("");
       const w = window.open("", "_blank");
-      w.document.write(`<!doctype html><html lang="pt-BR"><meta charset="utf-8"><title>QR ENEM · barracas</title>
+      w.document.write(`<!doctype html><html lang="pt-BR"><meta charset="utf-8"><title>QR ENEM · escolas</title>
         <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;800&family=Unbounded:wght@800&display=swap" rel="stylesheet">
         <style>
           @page { size: A4; margin: 0; }
