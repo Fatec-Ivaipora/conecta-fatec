@@ -57,7 +57,7 @@ export const ENEM = {
   ],
 };
 
-// Login da equipe (/escola/): conta Firebase e-mail/senha "equipe@conecta.fatecivaipora.com.br",
+// Login da equipe (/escola/): conta Firebase e-mail/senha "fatec@conecta.fatecivaipora.com.br" (usuário "fatec"),
 // criada no console; a senha fica só no Firebase.
 
 // Todas as origens (usado no painel da equipe)

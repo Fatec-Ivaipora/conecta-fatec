@@ -12,12 +12,12 @@ service cloud.firestore {
                                                 'suporte.avafatec@gmail.com'];
     }
 
-    // Equipe das escolas: usuário único "equipe" (conta e-mail/senha criada no console).
+    // Equipe das escolas: usuário único "fatec" (conta e-mail/senha criada no console).
     // Vê, pesquisa, lança e edita nome/cidade/cursos. Não apaga, não sorteia, não muda WhatsApp.
     function isTime() {
       return request.auth != null
         && request.auth.token.firebase.sign_in_provider == 'password'
-        && request.auth.token.email.lower() == 'equipe@conecta.fatecivaipora.com.br';
+        && request.auth.token.email.lower() == 'fatec@conecta.fatecivaipora.com.br';
     }
 
     // Edição de cadastro (admin ou equipe): só estes campos, sempre registrando quem editou.
