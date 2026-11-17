@@ -64,4 +64,6 @@ export const ENEM = {
 export const ORIGENS = [
   { origem: AULAO.origem, rotulo: "Aulão de Redação · 07/11" },
   ...ENEM.dias.map(d => ({ origem: d.origem, rotulo: d.rotulo })),
+  // Sorteio único entre todos os participantes do ENEM (os dois dias juntos)
+  { origem: "enem-todos", rotulo: "ENEM · 08 e 15/11 (todos)", junta: ENEM.dias.map(d => d.origem) },
 ];

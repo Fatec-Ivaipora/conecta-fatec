@@ -219,7 +219,8 @@
       $("sortear").classList.toggle("oculto", !origem.startsWith("enem"));
       if (!ativo) { $("aoVivo").textContent = ""; $("conteudo").className = "vazio"; $("conteudo").textContent = "Escolha uma ação acima."; return; }
       $("conteudo").className = "vazio"; $("conteudo").textContent = "Carregando…";
-      pararDeOuvir = onSnapshot(query(collection(db, "leads"), where("origem", "==", origem)), snap => {
+      const junta = ORIGENS.find(o => o.origem === origem)?.junta; // "todos do ENEM" = vários dias juntos
+      pararDeOuvir = onSnapshot(query(collection(db, "leads"), junta ? where("origem", "in", junta) : where("origem", "==", origem)), snap => {
         leads = snap.docs.map(d => ({ id: d.id, ...d.data({ serverTimestamps: "estimate" }) }))
           .sort((a, b) => (b.criadoEm?.seconds || 0) - (a.criadoEm?.seconds || 0));
         $("aoVivo").textContent = "● ao vivo · atualizado " + new Date().toLocaleTimeString("pt-BR", { hour: "2-digit", minute: "2-digit", second: "2-digit" });
@@ -312,7 +313,11 @@
     // ---------- Sorteio ----------
     let candidato = null;
     function sortearUm() {
-      const pool = leads.filter(l => !l.sorteado);
+      // Cada WhatsApp conta uma vez (quem veio nos dois domingos não tem chance dobrada)
+      // e quem já ganhou em qualquer dia não entra de novo.
+      const jaGanhou = new Set(leads.filter(l => l.sorteado).map(l => l.whatsapp));
+      const vistos = new Set();
+      const pool = leads.filter(l => !jaGanhou.has(l.whatsapp) && !vistos.has(l.whatsapp) && vistos.add(l.whatsapp));
       if (!pool.length) { $("palcoNome").textContent = "Ninguém disponível"; $("palcoDetalhe").textContent = ""; $("confirmar").disabled = true; return; }
       $("confirmar").disabled = true;
       let giros = 0;
